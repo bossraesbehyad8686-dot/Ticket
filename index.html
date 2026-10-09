@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mahan Air - دفتر فروش بلیت</title>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma, sans-serif; }
     body {
@@ -25,17 +26,11 @@
         border-bottom: 4px solid #1e5aa8;
     }
     .box-header img {
-        max-width: 200px;
-        background: #fff;
-        padding: 12px 20px;
-        border-radius: 12px;
-        margin-bottom: 10px;
+        max-width: 200px; background: #fff;
+        padding: 12px 20px; border-radius: 12px; margin-bottom: 10px;
     }
     .box-header .slogan {
-        color: #fff;
-        font-size: 13px;
-        letter-spacing: 1px;
-        opacity: 0.9;
+        color: #fff; font-size: 13px; letter-spacing: 1px; opacity: 0.9;
     }
     .box-body { padding: 25px; }
     .field { margin-bottom: 16px; }
@@ -45,15 +40,15 @@
     }
     .field input, .field select {
         width: 100%; padding: 11px 14px;
-        border: 2px solid #d0dbe8;
-        border-radius: 12px; font-size: 14px;
-        background: #fafbfc; transition: 0.25s;
+        border: 2px solid #d0dbe8; border-radius: 12px;
+        font-size: 14px; background: #fafbfc; transition: 0.25s;
     }
     .field input:focus, .field select:focus {
         border-color: #1e5aa8; background: #fff; outline: none;
         box-shadow: 0 0 0 4px rgba(30,90,168,0.15);
     }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     .btn-main {
         width: 100%; padding: 14px;
         background: linear-gradient(135deg, #0a1e3f, #1e5aa8);
@@ -90,10 +85,53 @@
         font-size: 14px; font-weight: bold; color: #666;
         cursor: pointer; transition: 0.25s;
     }
-    .trip-btn.active {
-        border-color: #1e5aa8; background: #eef4fb; color: #0a1e3f;
+    .trip-btn.active { border-color: #1e5aa8; background: #eef4fb; color: #0a1e3f; }
+
+    /* مسافران */
+    .passenger-block {
+        background: #f5f8fb;
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 12px;
+        position: relative;
+        border: 1px solid #e0e8f0;
+    }
+    .passenger-block .p-title {
+        font-size: 12px; font-weight: bold; color: #1e5aa8;
+        margin-bottom: 10px;
+    }
+    .passenger-block .remove-btn {
+        position: absolute; top: 10px; left: 10px;
+        background: #e74c3c; color: #fff;
+        border: none; border-radius: 50%;
+        width: 24px; height: 24px;
+        cursor: pointer; font-size: 14px;
+        line-height: 1;
+    }
+    .btn-add-passenger {
+        width: 100%; padding: 10px;
+        background: #eef4fb; color: #1e5aa8;
+        border: 2px dashed #1e5aa8;
+        border-radius: 12px;
+        font-size: 13px; font-weight: bold;
+        cursor: pointer; margin-bottom: 16px;
     }
 
+    /* قیمت */
+    .price-box {
+        background: linear-gradient(135deg, #0a1e3f, #1e5aa8);
+        color: #fff;
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .price-box .lbl { font-size: 12px; opacity: 0.85; }
+    .price-box .amount { font-size: 20px; font-weight: bold; }
+
+    /* بلیت */
     .ticket {
         display: none; background: #fff;
         border-radius: 18px; overflow: hidden;
@@ -101,24 +139,19 @@
         border: 2px solid #0a1e3f;
     }
     .ticket-top {
-        background: #0a1e3f;
-        color: #fff; padding: 20px;
-        text-align: center;
+        background: #0a1e3f; color: #fff;
+        padding: 20px; text-align: center;
         border-bottom: 3px solid #1e5aa8;
     }
     .ticket-top img {
-        max-width: 140px;
-        background: #fff;
-        padding: 8px 15px;
-        border-radius: 8px;
-        margin-bottom: 8px;
+        max-width: 140px; background: #fff;
+        padding: 8px 15px; border-radius: 8px; margin-bottom: 8px;
     }
     .ticket-top h2 { font-size: 16px; margin-bottom: 6px; color: #fff; }
     .ticket-top .code { font-size: 12px; opacity: 0.85; letter-spacing: 1px; }
 
     .ticket-block { padding: 18px 20px; border-bottom: 2px dashed #d0dbe8; }
     .ticket-block:last-child { border-bottom: none; }
-
     .leg-title {
         display: inline-block; background: #0a1e3f; color: #fff;
         padding: 4px 12px; border-radius: 20px;
@@ -155,30 +188,36 @@
         text-align: center; font-size: 11px; color: #fff;
         padding: 12px; background: #0a1e3f;
     }
+
+    /* اطلاعات تماس */
+    .contact-info {
+        background: #f5f8fb;
+        border-radius: 12px;
+        padding: 14px;
+        margin-top: 15px;
+        font-size: 11px;
+        color: #555;
+        line-height: 1.9;
+        border-right: 4px solid #1e5aa8;
+    }
+    .contact-info strong { color: #0a1e3f; }
+
     .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
-    .btn-print {
-        padding: 12px; background: #0a1e3f; color: #fff;
-        border: none; border-radius: 12px;
+    .btn-print, .btn-download, .btn-new, .btn-back {
+        padding: 12px; border: none; border-radius: 12px;
         font-size: 14px; font-weight: bold; cursor: pointer;
     }
-    .btn-new {
-        padding: 12px; background: #1e5aa8; color: #fff;
-        border: none; border-radius: 12px;
-        font-size: 14px; font-weight: bold; cursor: pointer;
-    }
+    .btn-print { background: #0a1e3f; color: #fff; }
+    .btn-download { background: #27ae60; color: #fff; }
+    .btn-new { background: #1e5aa8; color: #fff; }
     .btn-back {
-        padding: 12px; background: #e74c3c; color: #fff;
-        border: none; border-radius: 12px;
-        font-size: 14px; font-weight: bold; cursor: pointer;
+        background: #e74c3c; color: #fff;
         margin-top: 10px; width: 100%;
     }
     .return-field { display: none; }
     .footer-brand {
-        text-align: center;
-        font-size: 11px;
-        color: #888;
-        margin-top: 15px;
-        padding-top: 15px;
+        text-align: center; font-size: 11px; color: #888;
+        margin-top: 15px; padding-top: 15px;
         border-top: 1px solid #eee;
     }
     .footer-brand strong { color: #0a1e3f; }
@@ -219,11 +258,14 @@
     <div class="box-body" id="formBox" style="display:none;">
         <div class="msg" id="msg"></div>
 
+        <!-- مسافران -->
         <div class="field">
-            <label>نام و نام خانوادگی</label>
-            <input type="text" id="name" placeholder="مثلاً: سارا احمدی">
+            <label>مسافران (نام و کد ملی)</label>
+            <div id="passengersContainer"></div>
+            <button type="button" class="btn-add-passenger" onclick="addPassenger()">+ افزودن مسافر</button>
         </div>
 
+        <!-- نوع سفر -->
         <div class="field">
             <label>نوع سفر</label>
             <div class="trip-toggle">
@@ -242,24 +284,46 @@
             <select id="destination"><option value="">انتخاب کنید</option></select>
         </div>
 
+        <!-- تاریخ و ساعت -->
         <div class="field row2">
             <div>
                 <label>تاریخ رفت</label>
                 <input type="date" id="date">
             </div>
             <div>
-                <label>کلاس پرواز</label>
-                <select id="tclass">
-                    <option>اقتصادی</option>
-                    <option>بیزینس</option>
-                    <option>فرست کلاس</option>
-                </select>
+                <label>ساعت رفت</label>
+                <input type="time" id="time" value="10:00">
             </div>
         </div>
 
-        <div class="field return-field" id="returnField">
-            <label>تاریخ برگشت</label>
-            <input type="date" id="returnDate">
+        <div class="field row2 return-field" id="returnField">
+            <div>
+                <label>تاریخ برگشت</label>
+                <input type="date" id="returnDate">
+            </div>
+            <div>
+                <label>ساعت برگشت</label>
+                <input type="time" id="returnTime" value="18:00">
+            </div>
+        </div>
+
+        <!-- کلاس -->
+        <div class="field">
+            <label>کلاس پرواز</label>
+            <select id="tclass" onchange="updatePrice()">
+                <option value="اقتصادی">اقتصادی</option>
+                <option value="بیزینس">بیزینس</option>
+                <option value="فرست کلاس">فرست کلاس</option>
+            </select>
+        </div>
+
+        <!-- نمایش قیمت -->
+        <div class="price-box">
+            <div>
+                <div class="lbl">قیمت کل</div>
+                <div class="amount" id="priceDisplay">۰ تومان</div>
+            </div>
+            <div style="font-size:32px;">💰</div>
         </div>
 
         <button class="btn-main" onclick="makeTicket()">🎫 صدور بلیت</button>
@@ -268,112 +332,121 @@
 
     <!-- صفحه ۳: نمایش بلیت -->
     <div class="box-body" id="ticketBox" style="display:none;">
-        <div class="ticket" style="display:block;">
-            <div class="ticket-top">
-                <img src="mahan-logo.png" alt="Mahan Air">
-                <h2 id="tType">بلیت پرواز</h2>
-                <div class="code">کد رهگیری: <b id="tCode"></b></div>
+        <div id="ticketContent">
+            <div class="ticket" style="display:block;">
+                <div class="ticket-top">
+                    <img src="mahan-logo.png" alt="Mahan Air">
+                    <h2 id="tType">بلیت پرواز</h2>
+                    <div class="code">کد رهگیری: <b id="tCode"></b></div>
+                </div>
+
+                <div class="ticket-block" id="leg1">
+                    <span class="leg-title" id="leg1Title">پرواز رفت</span>
+                    <div class="flight-path">
+                        <div class="city-block">
+                            <div class="city-name" id="tFrom1">-</div>
+                            <div class="city-sub">مبدأ</div>
+                        </div>
+                        <div class="plane-icon">✈️</div>
+                        <div class="city-block">
+                            <div class="city-name" id="tTo1">-</div>
+                            <div class="city-sub">مقصد</div>
+                        </div>
+                    </div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <div class="lbl">تاریخ و ساعت</div>
+                            <div class="val" id="tDate1">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="lbl">کلاس</div>
+                            <div class="val" id="tClass1">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="lbl">شماره پرواز</div>
+                            <div class="val" id="tFlight1">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="lbl">وضعیت</div>
+                            <div class="val"><span class="status-badge">تأیید ✓</span></div>
+                        </div>
+                    </div>
+                    <div class="barcode-new"></div>
+                </div>
+
+                <div class="ticket-block" id="leg2" style="display:none;">
+                    <span class="leg-title return">پرواز برگشت</span>
+                    <div class="flight-path">
+                        <div class="city-block">
+                            <div class="city-name" id="tFrom2">-</div>
+                            <div class="city-sub">مبدأ</div>
+                        </div>
+                        <div class="plane-icon">🔄</div>
+                        <div class="city-block">
+                            <div class="city-name" id="tTo2">-</div>
+                            <div class="city-sub">مقصد</div>
+                        </div>
+                    </div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <div class="lbl">تاریخ و ساعت</div>
+                            <div class="val" id="tDate2">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="lbl">کلاس</div>
+                            <div class="val" id="tClass2">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="lbl">شماره پرواز</div>
+                            <div class="val" id="tFlight2">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="lbl">وضعیت</div>
+                            <div class="val"><span class="status-badge">تأیید ✓</span></div>
+                        </div>
+                    </div>
+                    <div class="barcode-new"></div>
+                </div>
+
+                <!-- لیست مسافران -->
+                <div class="ticket-block">
+                    <span class="leg-title">مسافران و صندلی‌ها</span>
+                    <div id="passengersTicketList" style="font-size:12px; line-height:2; color:#333;"></div>
+                </div>
+
+                <!-- قیمت روی بلیت -->
+                <div class="ticket-block">
+                    <div class="price-box" style="margin-bottom:0;">
+                        <div>
+                            <div class="lbl">مبلغ پرداختی</div>
+                            <div class="amount" id="tPrice">-</div>
+                        </div>
+                        <div style="font-size:28px;">💰</div>
+                    </div>
+                </div>
+
+                <div class="ticket-btm">Mahan Air | ما اعتماد پرواز</div>
             </div>
 
-            <div class="ticket-block">
-                <span class="leg-title" id="leg1Title">پرواز رفت</span>
-                <div class="flight-path">
-                    <div class="city-block">
-                        <div class="city-name" id="tFrom1">-</div>
-                        <div class="city-sub">مبدأ</div>
-                    </div>
-                    <div class="plane-icon">✈️</div>
-                    <div class="city-block">
-                        <div class="city-name" id="tTo1">-</div>
-                        <div class="city-sub">مقصد</div>
-                    </div>
-                </div>
-                <div class="details">
-                    <div class="detail-item">
-                        <div class="lbl">مسافر</div>
-                        <div class="val" id="tName1">-</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="lbl">تاریخ</div>
-                        <div class="val" id="tDate1">-</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="lbl">شماره صندلی</div>
-                        <div class="val" id="tSeat1">-</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="lbl">کلاس</div>
-                        <div class="val" id="tClass1">-</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="lbl">وضعیت</div>
-                        <div class="val"><span class="status-badge">تأیید ✓</span></div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="lbl">شماره پرواز</div>
-                        <div class="val" id="tFlight1">-</div>
-                    </div>
-                </div>
-                <div class="barcode-new"></div>
+            <!-- اطلاعات تماس -->
+            <div class="contact-info">
+                <strong>📞 اطلاعات تماس ماهان ایر:</strong><br>
+                ☎️ تلفن: ۰۲۱-۴۱۲۳۴۵۶۷ | ۰۲۱-۴۱۲۳۴۵۶۸<br>
+                📱 پشتیبانی: ۰۲۱-۹۱۰۰۲۰۰۰<br>
+                🏢 آدرس: تهران، خیابان ولیعصر، بالاتر از میدان ونک، برج ماهان، طبقه ۵<br>
+                🌐 وب‌سایت: www.mahanair.ir<br>
+                ✉️ ایمیل: info@mahanair.ir
             </div>
-
-            <div class="ticket-block" id="returnBlock" style="display:none;">
-                <span class="leg-title return">پرواز برگشت</span>
-                <div class="flight-path">
-                    <div class="city-block">
-                        <div class="city-name" id="tFrom2">-</div>
-                        <div class="city-sub">مبدأ</div>
-                    </div>
-                    <div class="plane-icon">🔄</div>
-                    <div class="city-block">
-                        <div class="city-name" id="tTo2">-</div>
-                        <div class="city-sub">مقصد</div>
-                    </div>
-                </div>
-                <div class="details">
-                    <div class="detail-item">
-                        <div class="lbl">مسافر</div>
-                        <div class="val" id="tName2">-</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="lbl">تاریخ</div>
-                        <div class="val" id="tDate2">-</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="lbl">شماره صندلی</div>
-                        <div class="val" id="tSeat2">-</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="lbl">کلاس</div>
-                        <div class="val" id="tClass2">-</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="lbl">وضعیت</div>
-                        <div class="val"><span class="status-badge">تأیید ✓</span></div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="lbl">شماره پرواز</div>
-                        <div class="val" id="tFlight2">-</div>
-                    </div>
-                </div>
-                <div class="barcode-new"></div>
-            </div>
-
-            <div class="ticket-btm">Mahan Air | ما اعتماد پرواز</div>
         </div>
 
         <div class="actions">
-            <button class="btn-print" onclick="printTicket()">🖨️ چاپ بلیت</button>
-            <button class="btn-new" onclick="newTicket()">🎫 بلیت جدید</button>
+            <button class="btn-print" onclick="printTicket()">🖨️ چاپ</button>
+            <button class="btn-download" onclick="downloadTicket()">📸 دانلود</button>
         </div>
-
-        <div class="footer-brand">
-            نمایندگی رسمی <strong>هواپیمایی ماهان</strong>
-        </div>
+        <button class="btn-new" onclick="newTicket()" style="margin-top:10px;">🎫 بلیت جدید</button>
     </div>
-</div>
-
-<script>
+   </div>
+   <script>
     const domesticCities = [
         "تهران", "مشهد", "اصفهان", "شیراز", "تبریز", "کرج", "اهواز",
         "قم", "کرمانشاه", "ارومیه", "زاهدان", "رشت", "کرمان", "یزد",
@@ -412,9 +485,16 @@
         "تونس (تونس)", "الجزیره (الجزایر)", "طرابلس (لیبی)"
     ];
 
+    // قیمت پایه هر مسیر (تومان)
+    const PRICE_DOMESTIC = 2500000;
+    const PRICE_INTERNATIONAL = 15000000;
+    const CLASS_MULT = { "اقتصادی": 1, "بیزینس": 2.2, "فرست کلاس": 3.5 };
+
     let currentType = '';
     let currentTrip = 'oneway';
+    let passengerCount = 1;
 
+    // ===== انتخاب نوع پرواز =====
     function selectType(type) {
         currentType = type;
         const originSel = document.getElementById('origin');
@@ -428,71 +508,135 @@
         if (type === 'domestic') {
             originLabel.textContent = 'مبدأ (شهر ایران)';
             destLabel.textContent = 'مقصد (شهر ایران)';
-            domesticCities.forEach(function(city) {
-                const o1 = document.createElement('option');
-                o1.textContent = city; o1.value = city;
-                originSel.appendChild(o1);
-                const o2 = document.createElement('option');
-                o2.textContent = city; o2.value = city;
-                destSel.appendChild(o2);
+            domesticCities.forEach(c => {
+                originSel.appendChild(new Option(c, c));
+                destSel.appendChild(new Option(c, c));
             });
         } else {
             originLabel.textContent = 'مبدأ (شهر ایران)';
             destLabel.textContent = 'مقصد (شهر خارجی)';
-            domesticCities.forEach(function(city) {
-                const o1 = document.createElement('option');
-                o1.textContent = city; o1.value = city;
-                originSel.appendChild(o1);
-            });
-            internationalCities.forEach(function(city) {
-                const o2 = document.createElement('option');
-                o2.textContent = city; o2.value = city;
-                destSel.appendChild(o2);
-            });
+            domesticCities.forEach(c => originSel.appendChild(new Option(c, c)));
+            internationalCities.forEach(c => destSel.appendChild(new Option(c, c)));
+        }
+
+        // اضافه کردن اولین مسافر
+        if (document.getElementById('passengersContainer').children.length === 0) {
+            addPassenger();
         }
 
         document.getElementById('typeBox').style.display = 'none';
         document.getElementById('formBox').style.display = 'block';
+        updatePrice();
     }
 
+    // ===== مدیریت مسافران =====
+    function addPassenger() {
+        if (passengerCount >= 9) {
+            alert('حداکثر ۹ مسافر مجاز است.');
+            return;
+        }
+        passengerCount++;
+        const container = document.getElementById('passengersContainer');
+        const idx = container.children.length + 1;
+        const div = document.createElement('div');
+        div.className = 'passenger-block';
+        div.innerHTML = `
+            <button type="button" class="remove-btn" onclick="removePassenger(this)">✕</button>
+            <div class="p-title">مسافر ${idx}</div>
+            <input type="text" placeholder="نام و نام خانوادگی" class="p-name" style="margin-bottom:8px; width:100%; padding:8px 10px; border:2px solid #d0dbe8; border-radius:8px; font-size:13px;">
+            <input type="text" placeholder="کد ملی (۱۰ رقم)" class="p-nid" maxlength="10" style="width:100%; padding:8px 10px; border:2px solid #d0dbe8; border-radius:8px; font-size:13px;">
+        `;
+        container.appendChild(div);
+        updatePrice();
+    }
+
+    function removePassenger(btn) {
+        const container = document.getElementById('passengersContainer');
+        if (container.children.length === 1) {
+            alert('حداقل یک مسافر لازم است.');
+            return;
+        }
+        btn.parentElement.remove();
+        passengerCount--;
+        // بروزرسانی شماره‌ها
+        Array.from(container.children).forEach((el, i) => {
+            el.querySelector('.p-title').textContent = `مسافر ${i + 1}`;
+        });
+        updatePrice();
+    }
+
+    // ===== نوع سفر =====
     function setTripType(t) {
         currentTrip = t;
         document.getElementById('btnOneWay').classList.toggle('active', t === 'oneway');
         document.getElementById('btnRound').classList.toggle('active', t === 'round');
-        document.getElementById('returnField').style.display = (t === 'round') ? 'block' : 'none';
+        document.getElementById('returnField').style.display = (t === 'round') ? 'grid' : 'none';
+        updatePrice();
     }
 
+    // ===== محاسبه قیمت =====
+    function updatePrice() {
+        const tclass = document.getElementById('tclass').value;
+        const mult = CLASS_MULT[tclass] || 1;
+        const basePrice = (currentType === 'international') ? PRICE_INTERNATIONAL : PRICE_DOMESTIC;
+        const passengers = document.getElementById('passengersContainer').children.length || 1;
+        const legs = (currentTrip === 'round') ? 2 : 1;
+        const total = basePrice * mult * passengers * legs;
+        document.getElementById('priceDisplay').textContent = total.toLocaleString('fa-IR') + ' تومان';
+    }
+
+    // ===== بازگشت =====
     function goBack() {
         document.getElementById('typeBox').style.display = 'block';
         document.getElementById('formBox').style.display = 'none';
         document.getElementById('ticketBox').style.display = 'none';
     }
 
+    // ===== تاریخ فارسی =====
     function toFaDate(d) {
         const obj = new Date(d);
         return obj.toLocaleDateString('fa-IR',
             { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
-    // شماره پرواز با پیشوند W5 (کد رسمی ماهان)
     function makeFlightNo() {
         return 'W5-' + Math.floor(100 + Math.random() * 900);
     }
 
     function makeSeat() {
-        return Math.floor(1 + Math.random() * 40) + 'A';
+        const letters = ['A','B','C','D','E','F'];
+        return Math.floor(1 + Math.random() * 30) + letters[Math.floor(Math.random() * 6)];
     }
 
+    // ===== صدور بلیت =====
     function makeTicket() {
-        const name = document.getElementById('name').value.trim();
+        const msg = document.getElementById('msg');
         const origin = document.getElementById('origin').value;
         const destination = document.getElementById('destination').value;
         const date = document.getElementById('date').value;
-        const tclass = document.getElementById('tclass').value;
+        const time = document.getElementById('time').value;
         const returnDate = document.getElementById('returnDate').value;
-        const msg = document.getElementById('msg');
+        const returnTime = document.getElementById('returnTime').value;
+        const tclass = document.getElementById('tclass').value;
 
-        if (!name || !origin || !destination || !date) {
+        // گرفتن مسافران
+        const passengerEls = document.querySelectorAll('.passenger-block');
+        const passengers = [];
+        let valid = true;
+        passengerEls.forEach((el, i) => {
+            const name = el.querySelector('.p-name').value.trim();
+            const nid = el.querySelector('.p-nid').value.trim();
+            if (!name) { valid = false; }
+            if (!/^\d{10}$/.test(nid)) { valid = false; }
+            passengers.push({ name, nid, seat: makeSeat() });
+        });
+
+        if (!valid) {
+            msg.style.display = 'block';
+            msg.textContent = 'لطفاً نام همه مسافران و کد ملی ۱۰ رقمی را وارد کنید!';
+            return;
+        }
+        if (!origin || !destination || !date || !time) {
             msg.style.display = 'block';
             msg.textContent = 'لطفاً همه فیلدها را پر کنید!';
             return;
@@ -503,9 +647,9 @@
             return;
         }
         if (currentTrip === 'round') {
-            if (!returnDate) {
+            if (!returnDate || !returnTime) {
                 msg.style.display = 'block';
-                msg.textContent = 'لطفاً تاریخ برگشت را وارد کنید!';
+                msg.textContent = 'لطفاً تاریخ و ساعت برگشت را وارد کنید!';
                 return;
             }
             if (new Date(returnDate) < new Date(date)) {
@@ -524,38 +668,79 @@
         document.getElementById('tType').textContent = title;
         document.getElementById('tCode').textContent = code;
 
+        // بلیت رفت
         document.getElementById('leg1Title').textContent =
             (currentTrip === 'round') ? 'پرواز رفت' : 'بلیت پرواز';
-
-        document.getElementById('tName1').textContent = name;
         document.getElementById('tFrom1').textContent = origin;
         document.getElementById('tTo1').textContent = destination;
-        document.getElementById('tDate1').textContent = toFaDate(date);
-        document.getElementById('tSeat1').textContent = makeSeat();
+        document.getElementById('tDate1').textContent = toFaDate(date) + ' - ساعت ' + time;
         document.getElementById('tClass1').textContent = tclass;
         document.getElementById('tFlight1').textContent = makeFlightNo();
 
+        // بلیت برگشت
         if (currentTrip === 'round') {
-            document.getElementById('returnBlock').style.display = 'block';
-            document.getElementById('tName2').textContent = name;
+            document.getElementById('leg2').style.display = 'block';
             document.getElementById('tFrom2').textContent = destination;
             document.getElementById('tTo2').textContent = origin;
-            document.getElementById('tDate2').textContent = toFaDate(returnDate);
-            document.getElementById('tSeat2').textContent = makeSeat();
+            document.getElementById('tDate2').textContent = toFaDate(returnDate) + ' - ساعت ' + returnTime;
             document.getElementById('tClass2').textContent = tclass;
             document.getElementById('tFlight2').textContent = makeFlightNo();
         } else {
-            document.getElementById('returnBlock').style.display = 'none';
+            document.getElementById('leg2').style.display = 'none';
         }
+
+        // لیست مسافران روی بلیت
+        let listHtml = '';
+        passengers.forEach((p, i) => {
+            listHtml += `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #e0e8f0;">
+                <span>👤 ${p.name}</span>
+                <span style="color:#888;">کد ملی: ${p.nid}</span>
+                <span style="color:#1e5aa8; font-weight:bold;">صندلی: ${p.seat}</span>
+            </div>`;
+        });
+        document.getElementById('passengersTicketList').innerHTML = listHtml;
+
+        // قیمت روی بلیت
+        const tclassMult = CLASS_MULT[tclass] || 1;
+        const basePrice = (currentType === 'international') ? PRICE_INTERNATIONAL : PRICE_DOMESTIC;
+        const legs = (currentTrip === 'round') ? 2 : 1;
+        const total = basePrice * tclassMult * passengers.length * legs;
+        document.getElementById('tPrice').textContent = total.toLocaleString('fa-IR') + ' تومان';
 
         document.getElementById('formBox').style.display = 'none';
         document.getElementById('ticketBox').style.display = 'block';
     }
 
+    // ===== چاپ =====
     function printTicket() { window.print(); }
 
+    // ===== دانلود تصویر بلیت =====
+    function downloadTicket() {
+        const el = document.getElementById('ticketContent');
+        const btn = event.target;
+        const original = btn.textContent;
+        btn.textContent = '⏳ در حال آماده‌سازی...';
+        btn.disabled = true;
+
+        html2canvas(el, { backgroundColor: '#0a1e3f', scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'mahan-ticket-' + Date.now() + '.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            btn.textContent = original;
+            btn.disabled = false;
+        }).catch(err => {
+            alert('خطا در دانلود تصویر. لطفاً دوباره تلاش کنید.');
+            btn.textContent = original;
+            btn.disabled = false;
+        });
+    }
+
+    // ===== بلیت جدید =====
     function newTicket() {
-        document.getElementById('name').value = '';
+        // پاک کردن مسافران
+        document.getElementById('passengersContainer').innerHTML = '';
+        passengerCount = 0;
         document.getElementById('origin').value = '';
         document.getElementById('destination').value = '';
         document.getElementById('date').value = '';
@@ -566,6 +751,13 @@
         document.getElementById('ticketBox').style.display = 'none';
         document.getElementById('typeBox').style.display = 'block';
     }
+
+    // ===== Event Listeners =====
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('tclass').addEventListener('change', updatePrice);
+        document.getElementById('origin').addEventListener('change', updatePrice);
+        document.getElementById('destination').addEventListener('change', updatePrice);
+    });
 </script>
 
 </body>
