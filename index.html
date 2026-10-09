@@ -52,6 +52,60 @@
     .btn-main:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(247,151,30,0.4); }
     .msg { color: #e74c3c; font-size: 13px; text-align: center; margin-bottom: 12px; display: none; }
 
+    /* صفحه انتخاب نوع پرواز */
+    .flight-type {
+        text-align: center;
+        padding: 10px 0;
+    }
+    .flight-type h2 {
+        color: #0f2027;
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+    .flight-type p {
+        color: #777;
+        font-size: 13px;
+        margin-bottom: 25px;
+    }
+    .type-btn {
+        width: 100%;
+        padding: 22px;
+        margin-bottom: 15px;
+        border: 3px solid #e0e0e0;
+        border-radius: 16px;
+        background: #fafafa;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .type-btn:hover {
+        border-color: #f7971e;
+        background: #fff8ed;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(247,151,30,0.2);
+    }
+    .type-btn .icon {
+        font-size: 36px;
+        margin-left: 15px;
+    }
+    .type-btn .text {
+        flex: 1;
+        text-align: right;
+    }
+    .type-btn .text strong {
+        display: block;
+        color: #0f2027;
+        font-size: 17px;
+        margin-bottom: 4px;
+    }
+    .type-btn .text span {
+        color: #888;
+        font-size: 12px;
+    }
+
+    /* بلیت */
     .ticket {
         display: none; background: #fff;
         border-radius: 18px; overflow: hidden;
@@ -104,17 +158,49 @@
         border: none; border-radius: 12px;
         font-size: 14px; font-weight: bold; cursor: pointer;
     }
-    .btn-print:hover, .btn-new:hover { opacity: 0.9; }
+    .btn-back {
+        padding: 12px; background: #e74c3c; color: #fff;
+        border: none; border-radius: 12px;
+        font-size: 14px; font-weight: bold; cursor: pointer;
+        margin-top: 10px; width: 100%;
+    }
+    .btn-print:hover, .btn-new:hover, .btn-back:hover { opacity: 0.9; }
 </style>
 </head>
 <body>
-  <div class="box">
+
+<div class="box">
     <div class="box-header">
         <h1>✈️ دفتر فروش بلیت</h1>
         <p>سریع، آسان و مطمئن</p>
     </div>
 
-    <div class="box-body" id="formBox">
+    <!-- صفحه ۱: انتخاب نوع پرواز -->
+    <div class="box-body" id="typeBox">
+        <div class="flight-type">
+            <h2>نوع پرواز خود را انتخاب کنید</h2>
+            <p>لطفاً مشخص کنید قصد سفر داخلی دارید یا خارجی</p>
+
+            <button class="type-btn" onclick="selectType('domestic')">
+                <span class="icon">🏙️</span>
+                <div class="text">
+                    <strong>پرواز داخلی</strong>
+                    <span>سفر بین شهرهای ایران</span>
+                </div>
+            </button>
+
+            <button class="type-btn" onclick="selectType('international')">
+                <span class="icon">🌍</span>
+                <div class="text">
+                    <strong>پرواز خارجی</strong>
+                    <span>سفر به کشورهای دیگر</span>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- صفحه ۲: فرم اطلاعات -->
+    <div class="box-body" id="formBox" style="display:none;">
         <div class="msg" id="msg"></div>
 
         <div class="field">
@@ -152,12 +238,14 @@
         </div>
 
         <button class="btn-main" onclick="makeTicket()">🎫 صدور بلیت</button>
+        <button class="btn-back" onclick="goBack()">← بازگشت به انتخاب نوع پرواز</button>
     </div>
 
+    <!-- صفحه ۳: نمایش بلیت -->
     <div class="box-body" id="ticketBox" style="display:none;">
         <div class="ticket" style="display:block;">
             <div class="ticket-top">
-                <h2>🎫 بلیت سفر</h2>
+                <h2 id="tType">🎫 بلیت سفر</h2>
                 <div class="code">کد رهگیری: <b id="tCode"></b></div>
             </div>
             <div class="ticket-mid">
@@ -211,8 +299,8 @@
 </div>
 
 <script>
-    // لیست کامل شهرهای ایران
-    const cities = [
+    // شهرهای داخلی
+    const domesticCities = [
         "تهران", "مشهد", "اصفهان", "شیراز", "تبریز", "کرج", "اهواز",
         "قم", "کرمانشاه", "ارومیه", "زاهدان", "رشت", "کرمان", "یزد",
         "اردبیل", "بندرعباس", "اراک", "اسلامشهر", "زنجان", "سنندج",
@@ -223,10 +311,50 @@
         "سقز", "مهاباد", "پیرانشهر", "نقده", "تکاب", "شاهین‌دژ"
     ];
 
-    // پر کردن خودکار لیست شهرها
-    window.onload = function() {
+    // شهرهای خارجی
+    const internationalCities = [
+        "استانبول (ترکیه)", "دبی (امارات)", "ابوظبی (امارات)", "دوحه (قطر)",
+        "کویت (کویت)", "مسقط (عمان)", "ریاض (عربستان)", "جده (عربستان)",
+        "بغداد (عراق)", "نجف (عراق)", "کربلا (عراق)", "بیروت (لبنان)",
+        "دمشق (سوریه)", "امان (اردن)", "قاهره (مصر)", "باکو (آذربایجان)",
+        "تفلیس (گرجستان)", "ایروان (ارمنستان)", "آنتالیا (ترکیه)",
+        "آنکارا (ترکیه)", "ازمیر (ترکیه)", "لندن (انگلستان)",
+        "پاریس (فرانسه)", "برلین (آلمان)", "فرانکفورت (آلمان)",
+        "مونیخ (آلمان)", "آمستردام (هلند)", "بروکسل (بلژیک)",
+        "رم (ایتالیا)", "میلان (ایتالیا)", "وین (اتریش)",
+        "زوریخ (سوئیس)", "ژنو (سوئیس)", "مادرید (اسپانیا)",
+        "بارسلونا (اسپانیا)", "لیسبون (پرتغال)", "استکهلم (سوئد)",
+        "اسلو (نروژ)", "کپنهاگ (دانمارک)", "هلسینکی (فنلاند)",
+        "مسکو (روسیه)", "سن‌پترزبورگ (روسیه)", "کی‌یف (اوکراین)",
+        "ورشو (لهستان)", "پراگ (چک)", "بوداپست (مجارستان)",
+        "آتن (یونان)", "دوبلین (ایرلند)", "نیویورک (آمریکا)",
+        "لس‌آنجلس (آمریکا)", "واشنگتن (آمریکا)", "شیکاگو (آمریکا)",
+        "تورنتو (کانادا)", "ونکوور (کانادا)", "مونترال (کانادا)",
+        "پکن (چین)", "شانگهای (چین)", "توکیو (ژاپن)", "اوساکا (ژاپن)",
+        "سئول (کره جنوبی)", "بانکوک (تایلند)", "کوالالامپور (مالزی)",
+        "سنگاپور (سنگاپور)", "جاکارتا (اندونزی)", "دهلی (هند)",
+        "بمبئی (هند)", "سیدنی (استرالیا)", "ملبورن (استرالیا)",
+        "دوربان (آفریقای جنوبی)", "کیپ‌تاون (آفریقای جنوبی)",
+        "نایروبی (کنیا)", "لاگوس (نیجریه)", "کازابلانکا (مراکش)",
+        "تونس (تونس)", "الجزیره (الجزایر)", "طرابلس (لیبی)"
+    ];
+
+    let currentType = '';
+
+    // انتخاب نوع پرواز
+    function selectType(type) {
+        currentType = type;
         const originSel = document.getElementById('origin');
         const destSel = document.getElementById('destination');
+
+        // پاک کردن لیست قبلی
+        originSel.innerHTML = '<option value="">انتخاب کنید</option>';
+        destSel.innerHTML = '<option value="">انتخاب کنید</option>';
+
+        // انتخاب لیست شهرها
+        const cities = (type === 'domestic') ? domesticCities : internationalCities;
+
+        // پر کردن لیست
         cities.forEach(function(city) {
             const o1 = document.createElement('option');
             o1.textContent = city;
@@ -238,8 +366,20 @@
             o2.value = city;
             destSel.appendChild(o2);
         });
-    };
 
+        // نمایش فرم
+        document.getElementById('typeBox').style.display = 'none';
+        document.getElementById('formBox').style.display = 'block';
+    }
+
+    // بازگشت به صفحه انتخاب نوع
+    function goBack() {
+        document.getElementById('typeBox').style.display = 'block';
+        document.getElementById('formBox').style.display = 'none';
+        document.getElementById('ticketBox').style.display = 'none';
+    }
+
+    // صدور بلیت
     function makeTicket() {
         const name = document.getElementById('name').value.trim();
         const origin = document.getElementById('origin').value;
@@ -261,12 +401,17 @@
         msg.style.display = 'none';
 
         const code = 'FL-' + Math.floor(10000 + Math.random() * 90000);
-        const flightNo = 'IR' + Math.floor(100 + Math.random() * 900);
+        const flightNo = (currentType === 'domestic' ? 'IR' : 'IX') +
+                         Math.floor(100 + Math.random() * 900);
         const seat = Math.floor(1 + Math.random() * 40) + 'A';
 
         const dateObj = new Date(date);
         const fdate = dateObj.toLocaleDateString('fa-IR',
             { year: 'numeric', month: 'long', day: 'numeric' });
+
+        // عنوان بلیت بر اساس نوع
+        document.getElementById('tType').textContent =
+            (currentType === 'domestic') ? '🎫 بلیت پرواز داخلی' : '🌍 بلیت پرواز خارجی';
 
         document.getElementById('tCode').textContent = code;
         document.getElementById('tName').textContent = name;
@@ -293,7 +438,7 @@
         document.getElementById('tclass').value = 'اقتصادی';
 
         document.getElementById('ticketBox').style.display = 'none';
-        document.getElementById('formBox').style.display = 'block';
+        document.getElementById('typeBox').style.display = 'block';
     }
 </script>
 
