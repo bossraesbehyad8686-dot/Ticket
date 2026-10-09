@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>صدور بلیت سفر</title>
+<title>Mahan Air - دفتر فروش بلیت</title>
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: Tahoma, sans-serif; }
     body {
         min-height: 100vh;
-        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        background: linear-gradient(135deg, #0a1e3f, #143d6b);
         display: flex; align-items: center; justify-content: center;
         padding: 20px;
     }
@@ -20,124 +20,125 @@
         box-shadow: 0 25px 60px rgba(0,0,0,0.5);
     }
     .box-header {
-        background: linear-gradient(135deg, #f7971e, #ffd200);
-        padding: 22px; text-align: center;
+        background: #0a1e3f;
+        padding: 20px; text-align: center;
+        border-bottom: 4px solid #1e5aa8;
     }
-    .box-header h1 { color: #333; font-size: 22px; }
-    .box-header p { color: #555; font-size: 12px; margin-top: 5px; }
+    .box-header img {
+        max-width: 200px;
+        background: #fff;
+        padding: 12px 20px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+    }
+    .box-header .slogan {
+        color: #fff;
+        font-size: 13px;
+        letter-spacing: 1px;
+        opacity: 0.9;
+    }
     .box-body { padding: 25px; }
     .field { margin-bottom: 16px; }
     .field label {
         display: block; margin-bottom: 6px;
-        font-size: 13px; font-weight: bold; color: #444;
+        font-size: 13px; font-weight: bold; color: #0a1e3f;
     }
     .field input, .field select {
         width: 100%; padding: 11px 14px;
-        border: 2px solid #e0e0e0;
+        border: 2px solid #d0dbe8;
         border-radius: 12px; font-size: 14px;
-        background: #fafafa; transition: 0.25s;
+        background: #fafbfc; transition: 0.25s;
     }
     .field input:focus, .field select:focus {
-        border-color: #f7971e; background: #fff; outline: none;
-        box-shadow: 0 0 0 4px rgba(247,151,30,0.15);
+        border-color: #1e5aa8; background: #fff; outline: none;
+        box-shadow: 0 0 0 4px rgba(30,90,168,0.15);
     }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .btn-main {
         width: 100%; padding: 14px;
-        background: linear-gradient(135deg, #f7971e, #ffd200);
-        color: #333; border: none; border-radius: 12px;
+        background: linear-gradient(135deg, #0a1e3f, #1e5aa8);
+        color: #fff; border: none; border-radius: 12px;
         font-size: 16px; font-weight: bold; cursor: pointer;
         transition: 0.25s;
     }
-    .btn-main:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(247,151,30,0.4); }
+    .btn-main:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(30,90,168,0.4); }
     .msg { color: #e74c3c; font-size: 13px; text-align: center; margin-bottom: 12px; display: none; }
 
     .flight-type { text-align: center; padding: 10px 0; }
-    .flight-type h2 { color: #0f2027; font-size: 20px; margin-bottom: 8px; }
+    .flight-type h2 { color: #0a1e3f; font-size: 20px; margin-bottom: 8px; }
     .flight-type p { color: #777; font-size: 13px; margin-bottom: 25px; }
     .type-btn {
         width: 100%; padding: 22px; margin-bottom: 15px;
-        border: 3px solid #e0e0e0; border-radius: 16px;
-        background: #fafafa; cursor: pointer; transition: 0.3s;
+        border: 3px solid #d0dbe8; border-radius: 16px;
+        background: #fafbfc; cursor: pointer; transition: 0.3s;
         display: flex; align-items: center; justify-content: space-between;
     }
     .type-btn:hover {
-        border-color: #f7971e; background: #fff8ed;
+        border-color: #1e5aa8; background: #eef4fb;
         transform: translateY(-3px);
-        box-shadow: 0 10px 25px rgba(247,151,30,0.2);
+        box-shadow: 0 10px 25px rgba(30,90,168,0.2);
     }
     .type-btn .icon { font-size: 36px; margin-left: 15px; }
     .type-btn .text { flex: 1; text-align: right; }
-    .type-btn .text strong { display: block; color: #0f2027; font-size: 17px; margin-bottom: 4px; }
+    .type-btn .text strong { display: block; color: #0a1e3f; font-size: 17px; margin-bottom: 4px; }
     .type-btn .text span { color: #888; font-size: 12px; }
 
-    /* انتخاب نوع سفر (یک‌طرفه / رفت و برگشت) */
-    .trip-toggle {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-bottom: 18px;
-    }
+    .trip-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
     .trip-btn {
-        padding: 12px;
-        border: 2px solid #e0e0e0;
-        border-radius: 12px;
-        background: #fafafa;
-        font-size: 14px;
-        font-weight: bold;
-        color: #666;
-        cursor: pointer;
-        transition: 0.25s;
+        padding: 12px; border: 2px solid #d0dbe8;
+        border-radius: 12px; background: #fafbfc;
+        font-size: 14px; font-weight: bold; color: #666;
+        cursor: pointer; transition: 0.25s;
     }
     .trip-btn.active {
-        border-color: #f7971e;
-        background: #fff8ed;
-        color: #333;
+        border-color: #1e5aa8; background: #eef4fb; color: #0a1e3f;
     }
 
     .ticket {
         display: none; background: #fff;
         border-radius: 18px; overflow: hidden;
         box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        border: 2px solid #0a1e3f;
     }
     .ticket-top {
-        background: linear-gradient(135deg, #0f2027, #2c5364);
+        background: #0a1e3f;
         color: #fff; padding: 20px;
+        text-align: center;
+        border-bottom: 3px solid #1e5aa8;
     }
-    .ticket-top h2 { font-size: 18px; margin-bottom: 6px; }
+    .ticket-top img {
+        max-width: 140px;
+        background: #fff;
+        padding: 8px 15px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
+    .ticket-top h2 { font-size: 16px; margin-bottom: 6px; color: #fff; }
     .ticket-top .code { font-size: 12px; opacity: 0.85; letter-spacing: 1px; }
 
-    /* برای رفت و برگشت: دو بلیت */
-    .ticket-block {
-        padding: 18px 20px;
-        border-bottom: 2px dashed #ddd;
-    }
+    .ticket-block { padding: 18px 20px; border-bottom: 2px dashed #d0dbe8; }
     .ticket-block:last-child { border-bottom: none; }
 
     .leg-title {
-        display: inline-block;
-        background: #0f2027;
-        color: #fff;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 11px;
-        margin-bottom: 12px;
+        display: inline-block; background: #0a1e3f; color: #fff;
+        padding: 4px 12px; border-radius: 20px;
+        font-size: 11px; margin-bottom: 12px;
     }
-    .leg-title.return { background: #f7971e; color: #333; }
+    .leg-title.return { background: #1e5aa8; }
 
     .flight-path {
         display: flex; align-items: center; justify-content: space-between;
-        margin-bottom: 15px; background: #f8f9fa;
+        margin-bottom: 15px; background: #eef4fb;
         border-radius: 14px; padding: 15px;
     }
     .city-block { text-align: center; flex: 1; }
-    .city-block .city-name { font-size: 14px; font-weight: bold; color: #0f2027; }
-    .city-block .city-sub { font-size: 10px; color: #999; margin-top: 3px; }
-    .plane-icon { font-size: 20px; color: #f7971e; padding: 0 5px; }
+    .city-block .city-name { font-size: 14px; font-weight: bold; color: #0a1e3f; }
+    .city-block .city-sub { font-size: 10px; color: #888; margin-top: 3px; }
+    .plane-icon { font-size: 20px; color: #1e5aa8; padding: 0 5px; }
     .details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .detail-item { background: #f8f9fa; border-radius: 10px; padding: 8px 10px; }
-    .detail-item .lbl { font-size: 10px; color: #999; }
-    .detail-item .val { font-size: 13px; font-weight: bold; color: #333; margin-top: 3px; }
+    .detail-item { background: #f5f8fb; border-radius: 10px; padding: 8px 10px; }
+    .detail-item .lbl { font-size: 10px; color: #888; }
+    .detail-item .val { font-size: 13px; font-weight: bold; color: #0a1e3f; margin-top: 3px; }
     .status-badge {
         display: inline-block; background: #27ae60; color: #fff;
         padding: 3px 10px; border-radius: 20px; font-size: 10px;
@@ -145,24 +146,23 @@
     .barcode-new {
         margin-top: 15px; height: 45px;
         background: repeating-linear-gradient(90deg,
-            #0f2027 0px, #0f2027 1px, transparent 1px, transparent 3px,
-            #0f2027 3px, #0f2027 6px, transparent 6px, transparent 8px,
-            #0f2027 8px, #0f2027 9px, transparent 9px, transparent 12px);
+            #0a1e3f 0px, #0a1e3f 1px, transparent 1px, transparent 3px,
+            #0a1e3f 3px, #0a1e3f 6px, transparent 6px, transparent 8px,
+            #0a1e3f 8px, #0a1e3f 9px, transparent 9px, transparent 12px);
         border-radius: 4px;
     }
     .ticket-btm {
-        text-align: center; font-size: 11px; color: #999;
-        padding: 12px; border-top: 1px dashed #ddd;
-        background: #fafafa;
+        text-align: center; font-size: 11px; color: #fff;
+        padding: 12px; background: #0a1e3f;
     }
     .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
     .btn-print {
-        padding: 12px; background: #0f2027; color: #fff;
+        padding: 12px; background: #0a1e3f; color: #fff;
         border: none; border-radius: 12px;
         font-size: 14px; font-weight: bold; cursor: pointer;
     }
     .btn-new {
-        padding: 12px; background: #f7971e; color: #333;
+        padding: 12px; background: #1e5aa8; color: #fff;
         border: none; border-radius: 12px;
         font-size: 14px; font-weight: bold; cursor: pointer;
     }
@@ -172,17 +172,23 @@
         font-size: 14px; font-weight: bold; cursor: pointer;
         margin-top: 10px; width: 100%;
     }
-    .btn-print:hover, .btn-new:hover, .btn-back:hover { opacity: 0.9; }
-
     .return-field { display: none; }
+    .footer-brand {
+        text-align: center;
+        font-size: 11px;
+        color: #888;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+    .footer-brand strong { color: #0a1e3f; }
 </style>
 </head>
 <body>
-
-<div class="box">
+   <div class="box">
     <div class="box-header">
-        <h1>✈️ دفتر فروش بلیت</h1>
-        <p>سریع، آسان و مطمئن</p>
+        <img src="mahan-logo.png" alt="Mahan Air">
+        <div class="slogan">ما اعتماد پرواز</div>
     </div>
 
     <!-- صفحه ۱: انتخاب نوع پرواز -->
@@ -218,7 +224,6 @@
             <input type="text" id="name" placeholder="مثلاً: سارا احمدی">
         </div>
 
-        <!-- انتخاب نوع سفر -->
         <div class="field">
             <label>نوع سفر</label>
             <div class="trip-toggle">
@@ -229,16 +234,12 @@
 
         <div class="field">
             <label id="originLabel">مبدأ</label>
-            <select id="origin">
-                <option value="">انتخاب کنید</option>
-            </select>
+            <select id="origin"><option value="">انتخاب کنید</option></select>
         </div>
 
         <div class="field">
             <label id="destLabel">مقصد</label>
-            <select id="destination">
-                <option value="">انتخاب کنید</option>
-            </select>
+            <select id="destination"><option value="">انتخاب کنید</option></select>
         </div>
 
         <div class="field row2">
@@ -269,11 +270,11 @@
     <div class="box-body" id="ticketBox" style="display:none;">
         <div class="ticket" style="display:block;">
             <div class="ticket-top">
-                <h2 id="tType">🎫 بلیت سفر</h2>
+                <img src="mahan-logo.png" alt="Mahan Air">
+                <h2 id="tType">بلیت پرواز</h2>
                 <div class="code">کد رهگیری: <b id="tCode"></b></div>
             </div>
 
-            <!-- بلیت رفت -->
             <div class="ticket-block">
                 <span class="leg-title" id="leg1Title">پرواز رفت</span>
                 <div class="flight-path">
@@ -316,7 +317,6 @@
                 <div class="barcode-new"></div>
             </div>
 
-            <!-- بلیت برگشت (فقط در حالت رفت و برگشت) -->
             <div class="ticket-block" id="returnBlock" style="display:none;">
                 <span class="leg-title return">پرواز برگشت</span>
                 <div class="flight-path">
@@ -359,18 +359,21 @@
                 <div class="barcode-new"></div>
             </div>
 
-            <div class="ticket-btm">از سفر خود لذت ببرید 🌟 | دفتر فروش بلیت</div>
+            <div class="ticket-btm">Mahan Air | ما اعتماد پرواز</div>
         </div>
 
         <div class="actions">
             <button class="btn-print" onclick="printTicket()">🖨️ چاپ بلیت</button>
             <button class="btn-new" onclick="newTicket()">🎫 بلیت جدید</button>
         </div>
+
+        <div class="footer-brand">
+            نمایندگی رسمی <strong>هواپیمایی ماهان</strong>
+        </div>
     </div>
 </div>
 
 <script>
-    // شهرهای داخلی
     const domesticCities = [
         "تهران", "مشهد", "اصفهان", "شیراز", "تبریز", "کرج", "اهواز",
         "قم", "کرمانشاه", "ارومیه", "زاهدان", "رشت", "کرمان", "یزد",
@@ -382,7 +385,6 @@
         "سقز", "مهاباد", "پیرانشهر", "نقده", "تکاب", "شاهین‌دژ"
     ];
 
-    // شهرهای خارجی
     const internationalCities = [
         "استانبول (ترکیه)", "دبی (امارات)", "ابوظبی (امارات)", "دوحه (قطر)",
         "کویت (کویت)", "مسقط (عمان)", "ریاض (عربستان)", "جده (عربستان)",
@@ -413,7 +415,6 @@
     let currentType = '';
     let currentTrip = 'oneway';
 
-    // انتخاب نوع پرواز
     function selectType(type) {
         currentType = type;
         const originSel = document.getElementById('origin');
@@ -427,7 +428,6 @@
         if (type === 'domestic') {
             originLabel.textContent = 'مبدأ (شهر ایران)';
             destLabel.textContent = 'مقصد (شهر ایران)';
-
             domesticCities.forEach(function(city) {
                 const o1 = document.createElement('option');
                 o1.textContent = city; o1.value = city;
@@ -439,7 +439,6 @@
         } else {
             originLabel.textContent = 'مبدأ (شهر ایران)';
             destLabel.textContent = 'مقصد (شهر خارجی)';
-
             domesticCities.forEach(function(city) {
                 const o1 = document.createElement('option');
                 o1.textContent = city; o1.value = city;
@@ -456,7 +455,6 @@
         document.getElementById('formBox').style.display = 'block';
     }
 
-    // انتخاب نوع سفر (یک‌طرفه / رفت و برگشت)
     function setTripType(t) {
         currentTrip = t;
         document.getElementById('btnOneWay').classList.toggle('active', t === 'oneway');
@@ -464,32 +462,27 @@
         document.getElementById('returnField').style.display = (t === 'round') ? 'block' : 'none';
     }
 
-    // بازگشت
     function goBack() {
         document.getElementById('typeBox').style.display = 'block';
         document.getElementById('formBox').style.display = 'none';
         document.getElementById('ticketBox').style.display = 'none';
     }
 
-    // تابع کمکی: تاریخ فارسی
     function toFaDate(d) {
         const obj = new Date(d);
         return obj.toLocaleDateString('fa-IR',
             { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
-    // تابع کمکی: شماره پرواز
+    // شماره پرواز با پیشوند W5 (کد رسمی ماهان)
     function makeFlightNo() {
-        const prefix = (currentType === 'domestic') ? 'IR' : 'IX';
-        return prefix + Math.floor(100 + Math.random() * 900);
+        return 'W5-' + Math.floor(100 + Math.random() * 900);
     }
 
-    // تابع کمکی: شماره صندلی
     function makeSeat() {
         return Math.floor(1 + Math.random() * 40) + 'A';
     }
 
-    // صدور بلیت
     function makeTicket() {
         const name = document.getElementById('name').value.trim();
         const origin = document.getElementById('origin').value;
@@ -523,17 +516,14 @@
         }
         msg.style.display = 'none';
 
-        const code = 'FL-' + Math.floor(10000 + Math.random() * 90000);
+        const code = 'MA-' + Math.floor(100000 + Math.random() * 900000);
 
-        // عنوان بلیت
-        let title = '';
-        if (currentType === 'domestic') title = '🎫 بلیت پرواز داخلی';
-        else title = '🌍 بلیت پرواز خارجی';
+        let title = 'بلیت پرواز ';
+        title += (currentType === 'domestic') ? 'داخلی' : 'خارجی';
         if (currentTrip === 'round') title += ' (رفت و برگشت)';
         document.getElementById('tType').textContent = title;
         document.getElementById('tCode').textContent = code;
 
-        // ===== بلیت رفت =====
         document.getElementById('leg1Title').textContent =
             (currentTrip === 'round') ? 'پرواز رفت' : 'بلیت پرواز';
 
@@ -545,11 +535,10 @@
         document.getElementById('tClass1').textContent = tclass;
         document.getElementById('tFlight1').textContent = makeFlightNo();
 
-        // ===== بلیت برگشت =====
         if (currentTrip === 'round') {
             document.getElementById('returnBlock').style.display = 'block';
             document.getElementById('tName2').textContent = name;
-            document.getElementById('tFrom2').textContent = destination; // برگشت: مقصد به مبدأ
+            document.getElementById('tFrom2').textContent = destination;
             document.getElementById('tTo2').textContent = origin;
             document.getElementById('tDate2').textContent = toFaDate(returnDate);
             document.getElementById('tSeat2').textContent = makeSeat();
@@ -563,9 +552,7 @@
         document.getElementById('ticketBox').style.display = 'block';
     }
 
-    function printTicket() {
-        window.print();
-    }
+    function printTicket() { window.print(); }
 
     function newTicket() {
         document.getElementById('name').value = '';
@@ -574,10 +561,8 @@
         document.getElementById('date').value = '';
         document.getElementById('returnDate').value = '';
         document.getElementById('tclass').value = 'اقتصادی';
-
         currentTrip = 'oneway';
         setTripType('oneway');
-
         document.getElementById('ticketBox').style.display = 'none';
         document.getElementById('typeBox').style.display = 'block';
     }
