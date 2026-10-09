@@ -52,60 +52,25 @@
     .btn-main:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(247,151,30,0.4); }
     .msg { color: #e74c3c; font-size: 13px; text-align: center; margin-bottom: 12px; display: none; }
 
-    /* صفحه انتخاب نوع پرواز */
-    .flight-type {
-        text-align: center;
-        padding: 10px 0;
-    }
-    .flight-type h2 {
-        color: #0f2027;
-        font-size: 20px;
-        margin-bottom: 8px;
-    }
-    .flight-type p {
-        color: #777;
-        font-size: 13px;
-        margin-bottom: 25px;
-    }
+    .flight-type { text-align: center; padding: 10px 0; }
+    .flight-type h2 { color: #0f2027; font-size: 20px; margin-bottom: 8px; }
+    .flight-type p { color: #777; font-size: 13px; margin-bottom: 25px; }
     .type-btn {
-        width: 100%;
-        padding: 22px;
-        margin-bottom: 15px;
-        border: 3px solid #e0e0e0;
-        border-radius: 16px;
-        background: #fafafa;
-        cursor: pointer;
-        transition: 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        width: 100%; padding: 22px; margin-bottom: 15px;
+        border: 3px solid #e0e0e0; border-radius: 16px;
+        background: #fafafa; cursor: pointer; transition: 0.3s;
+        display: flex; align-items: center; justify-content: space-between;
     }
     .type-btn:hover {
-        border-color: #f7971e;
-        background: #fff8ed;
+        border-color: #f7971e; background: #fff8ed;
         transform: translateY(-3px);
         box-shadow: 0 10px 25px rgba(247,151,30,0.2);
     }
-    .type-btn .icon {
-        font-size: 36px;
-        margin-left: 15px;
-    }
-    .type-btn .text {
-        flex: 1;
-        text-align: right;
-    }
-    .type-btn .text strong {
-        display: block;
-        color: #0f2027;
-        font-size: 17px;
-        margin-bottom: 4px;
-    }
-    .type-btn .text span {
-        color: #888;
-        font-size: 12px;
-    }
+    .type-btn .icon { font-size: 36px; margin-left: 15px; }
+    .type-btn .text { flex: 1; text-align: right; }
+    .type-btn .text strong { display: block; color: #0f2027; font-size: 17px; margin-bottom: 4px; }
+    .type-btn .text span { color: #888; font-size: 12px; }
 
-    /* بلیت */
     .ticket {
         display: none; background: #fff;
         border-radius: 18px; overflow: hidden;
@@ -123,10 +88,10 @@
         margin-bottom: 20px; background: #f8f9fa;
         border-radius: 14px; padding: 15px;
     }
-    .city-block { text-align: center; }
-    .city-block .city-name { font-size: 17px; font-weight: bold; color: #0f2027; }
+    .city-block { text-align: center; flex: 1; }
+    .city-block .city-name { font-size: 15px; font-weight: bold; color: #0f2027; }
     .city-block .city-sub { font-size: 10px; color: #999; margin-top: 3px; }
-    .plane-icon { font-size: 22px; color: #f7971e; }
+    .plane-icon { font-size: 22px; color: #f7971e; padding: 0 8px; }
     .details { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .detail-item { background: #f8f9fa; border-radius: 12px; padding: 10px 12px; }
     .detail-item .lbl { font-size: 10px; color: #999; }
@@ -193,7 +158,7 @@
                 <span class="icon">🌍</span>
                 <div class="text">
                     <strong>پرواز خارجی</strong>
-                    <span>سفر به کشورهای دیگر</span>
+                    <span>سفر از ایران به کشورهای دیگر</span>
                 </div>
             </button>
         </div>
@@ -209,14 +174,14 @@
         </div>
 
         <div class="field">
-            <label>مبدأ</label>
+            <label id="originLabel">مبدأ</label>
             <select id="origin">
                 <option value="">انتخاب کنید</option>
             </select>
         </div>
 
         <div class="field">
-            <label>مقصد</label>
+            <label id="destLabel">مقصد</label>
             <select id="destination">
                 <option value="">انتخاب کنید</option>
             </select>
@@ -346,26 +311,48 @@
         currentType = type;
         const originSel = document.getElementById('origin');
         const destSel = document.getElementById('destination');
+        const originLabel = document.getElementById('originLabel');
+        const destLabel = document.getElementById('destLabel');
 
         // پاک کردن لیست قبلی
         originSel.innerHTML = '<option value="">انتخاب کنید</option>';
         destSel.innerHTML = '<option value="">انتخاب کنید</option>';
 
-        // انتخاب لیست شهرها
-        const cities = (type === 'domestic') ? domesticCities : internationalCities;
+        if (type === 'domestic') {
+            // پرواز داخلی: مبدأ و مقصد از شهرهای ایران
+            originLabel.textContent = 'مبدأ (شهر ایران)';
+            destLabel.textContent = 'مقصد (شهر ایران)';
 
-        // پر کردن لیست
-        cities.forEach(function(city) {
-            const o1 = document.createElement('option');
-            o1.textContent = city;
-            o1.value = city;
-            originSel.appendChild(o1);
+            domesticCities.forEach(function(city) {
+                const o1 = document.createElement('option');
+                o1.textContent = city;
+                o1.value = city;
+                originSel.appendChild(o1);
 
-            const o2 = document.createElement('option');
-            o2.textContent = city;
-            o2.value = city;
-            destSel.appendChild(o2);
-        });
+                const o2 = document.createElement('option');
+                o2.textContent = city;
+                o2.value = city;
+                destSel.appendChild(o2);
+            });
+        } else {
+            // پرواز خارجی: مبدأ از شهرهای ایران، مقصد از شهرهای خارجی
+            originLabel.textContent = 'مبدأ (شهر ایران)';
+            destLabel.textContent = 'مقصد (شهر خارجی)';
+
+            domesticCities.forEach(function(city) {
+                const o1 = document.createElement('option');
+                o1.textContent = city;
+                o1.value = city;
+                originSel.appendChild(o1);
+            });
+
+            internationalCities.forEach(function(city) {
+                const o2 = document.createElement('option');
+                o2.textContent = city;
+                o2.value = city;
+                destSel.appendChild(o2);
+            });
+        }
 
         // نمایش فرم
         document.getElementById('typeBox').style.display = 'none';
