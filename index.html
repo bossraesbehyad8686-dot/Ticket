@@ -71,6 +71,30 @@
     .type-btn .text strong { display: block; color: #0f2027; font-size: 17px; margin-bottom: 4px; }
     .type-btn .text span { color: #888; font-size: 12px; }
 
+    /* انتخاب نوع سفر (یک‌طرفه / رفت و برگشت) */
+    .trip-toggle {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+    .trip-btn {
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        background: #fafafa;
+        font-size: 14px;
+        font-weight: bold;
+        color: #666;
+        cursor: pointer;
+        transition: 0.25s;
+    }
+    .trip-btn.active {
+        border-color: #f7971e;
+        background: #fff8ed;
+        color: #333;
+    }
+
     .ticket {
         display: none; background: #fff;
         border-radius: 18px; overflow: hidden;
@@ -82,26 +106,44 @@
     }
     .ticket-top h2 { font-size: 18px; margin-bottom: 6px; }
     .ticket-top .code { font-size: 12px; opacity: 0.85; letter-spacing: 1px; }
-    .ticket-mid { padding: 22px 20px; }
+
+    /* برای رفت و برگشت: دو بلیت */
+    .ticket-block {
+        padding: 18px 20px;
+        border-bottom: 2px dashed #ddd;
+    }
+    .ticket-block:last-child { border-bottom: none; }
+
+    .leg-title {
+        display: inline-block;
+        background: #0f2027;
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        margin-bottom: 12px;
+    }
+    .leg-title.return { background: #f7971e; color: #333; }
+
     .flight-path {
         display: flex; align-items: center; justify-content: space-between;
-        margin-bottom: 20px; background: #f8f9fa;
+        margin-bottom: 15px; background: #f8f9fa;
         border-radius: 14px; padding: 15px;
     }
     .city-block { text-align: center; flex: 1; }
-    .city-block .city-name { font-size: 15px; font-weight: bold; color: #0f2027; }
+    .city-block .city-name { font-size: 14px; font-weight: bold; color: #0f2027; }
     .city-block .city-sub { font-size: 10px; color: #999; margin-top: 3px; }
-    .plane-icon { font-size: 22px; color: #f7971e; padding: 0 8px; }
-    .details { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .detail-item { background: #f8f9fa; border-radius: 12px; padding: 10px 12px; }
+    .plane-icon { font-size: 20px; color: #f7971e; padding: 0 5px; }
+    .details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .detail-item { background: #f8f9fa; border-radius: 10px; padding: 8px 10px; }
     .detail-item .lbl { font-size: 10px; color: #999; }
-    .detail-item .val { font-size: 14px; font-weight: bold; color: #333; margin-top: 3px; }
+    .detail-item .val { font-size: 13px; font-weight: bold; color: #333; margin-top: 3px; }
     .status-badge {
         display: inline-block; background: #27ae60; color: #fff;
-        padding: 3px 10px; border-radius: 20px; font-size: 11px;
+        padding: 3px 10px; border-radius: 20px; font-size: 10px;
     }
     .barcode-new {
-        margin-top: 18px; height: 55px;
+        margin-top: 15px; height: 45px;
         background: repeating-linear-gradient(90deg,
             #0f2027 0px, #0f2027 1px, transparent 1px, transparent 3px,
             #0f2027 3px, #0f2027 6px, transparent 6px, transparent 8px,
@@ -111,6 +153,7 @@
     .ticket-btm {
         text-align: center; font-size: 11px; color: #999;
         padding: 12px; border-top: 1px dashed #ddd;
+        background: #fafafa;
     }
     .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
     .btn-print {
@@ -130,6 +173,8 @@
         margin-top: 10px; width: 100%;
     }
     .btn-print:hover, .btn-new:hover, .btn-back:hover { opacity: 0.9; }
+
+    .return-field { display: none; }
 </style>
 </head>
 <body>
@@ -173,6 +218,15 @@
             <input type="text" id="name" placeholder="مثلاً: سارا احمدی">
         </div>
 
+        <!-- انتخاب نوع سفر -->
+        <div class="field">
+            <label>نوع سفر</label>
+            <div class="trip-toggle">
+                <button type="button" class="trip-btn active" id="btnOneWay" onclick="setTripType('oneway')">✈️ یک‌طرفه</button>
+                <button type="button" class="trip-btn" id="btnRound" onclick="setTripType('round')">🔄 رفت و برگشت</button>
+            </div>
+        </div>
+
         <div class="field">
             <label id="originLabel">مبدأ</label>
             <select id="origin">
@@ -189,7 +243,7 @@
 
         <div class="field row2">
             <div>
-                <label>تاریخ حرکت</label>
+                <label>تاریخ رفت</label>
                 <input type="date" id="date">
             </div>
             <div>
@@ -200,6 +254,11 @@
                     <option>فرست کلاس</option>
                 </select>
             </div>
+        </div>
+
+        <div class="field return-field" id="returnField">
+            <label>تاریخ برگشت</label>
+            <input type="date" id="returnDate">
         </div>
 
         <button class="btn-main" onclick="makeTicket()">🎫 صدور بلیت</button>
@@ -213,46 +272,93 @@
                 <h2 id="tType">🎫 بلیت سفر</h2>
                 <div class="code">کد رهگیری: <b id="tCode"></b></div>
             </div>
-            <div class="ticket-mid">
+
+            <!-- بلیت رفت -->
+            <div class="ticket-block">
+                <span class="leg-title" id="leg1Title">پرواز رفت</span>
                 <div class="flight-path">
                     <div class="city-block">
-                        <div class="city-name" id="tFrom">-</div>
+                        <div class="city-name" id="tFrom1">-</div>
                         <div class="city-sub">مبدأ</div>
                     </div>
                     <div class="plane-icon">✈️</div>
                     <div class="city-block">
-                        <div class="city-name" id="tTo">-</div>
+                        <div class="city-name" id="tTo1">-</div>
                         <div class="city-sub">مقصد</div>
                     </div>
                 </div>
                 <div class="details">
                     <div class="detail-item">
                         <div class="lbl">مسافر</div>
-                        <div class="val" id="tName">-</div>
+                        <div class="val" id="tName1">-</div>
                     </div>
                     <div class="detail-item">
                         <div class="lbl">تاریخ</div>
-                        <div class="val" id="tDate">-</div>
+                        <div class="val" id="tDate1">-</div>
                     </div>
                     <div class="detail-item">
                         <div class="lbl">شماره صندلی</div>
-                        <div class="val" id="tSeat">-</div>
+                        <div class="val" id="tSeat1">-</div>
                     </div>
                     <div class="detail-item">
                         <div class="lbl">کلاس</div>
-                        <div class="val" id="tClass">-</div>
+                        <div class="val" id="tClass1">-</div>
                     </div>
                     <div class="detail-item">
                         <div class="lbl">وضعیت</div>
-                        <div class="val"><span class="status-badge">تأیید شد ✓</span></div>
+                        <div class="val"><span class="status-badge">تأیید ✓</span></div>
                     </div>
                     <div class="detail-item">
                         <div class="lbl">شماره پرواز</div>
-                        <div class="val" id="tFlight">-</div>
+                        <div class="val" id="tFlight1">-</div>
                     </div>
                 </div>
                 <div class="barcode-new"></div>
             </div>
+
+            <!-- بلیت برگشت (فقط در حالت رفت و برگشت) -->
+            <div class="ticket-block" id="returnBlock" style="display:none;">
+                <span class="leg-title return">پرواز برگشت</span>
+                <div class="flight-path">
+                    <div class="city-block">
+                        <div class="city-name" id="tFrom2">-</div>
+                        <div class="city-sub">مبدأ</div>
+                    </div>
+                    <div class="plane-icon">🔄</div>
+                    <div class="city-block">
+                        <div class="city-name" id="tTo2">-</div>
+                        <div class="city-sub">مقصد</div>
+                    </div>
+                </div>
+                <div class="details">
+                    <div class="detail-item">
+                        <div class="lbl">مسافر</div>
+                        <div class="val" id="tName2">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="lbl">تاریخ</div>
+                        <div class="val" id="tDate2">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="lbl">شماره صندلی</div>
+                        <div class="val" id="tSeat2">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="lbl">کلاس</div>
+                        <div class="val" id="tClass2">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="lbl">وضعیت</div>
+                        <div class="val"><span class="status-badge">تأیید ✓</span></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="lbl">شماره پرواز</div>
+                        <div class="val" id="tFlight2">-</div>
+                    </div>
+                </div>
+                <div class="barcode-new"></div>
+            </div>
+
             <div class="ticket-btm">از سفر خود لذت ببرید 🌟 | دفتر فروش بلیت</div>
         </div>
 
@@ -305,6 +411,7 @@
     ];
 
     let currentType = '';
+    let currentTrip = 'oneway';
 
     // انتخاب نوع پرواز
     function selectType(type) {
@@ -314,56 +421,72 @@
         const originLabel = document.getElementById('originLabel');
         const destLabel = document.getElementById('destLabel');
 
-        // پاک کردن لیست قبلی
         originSel.innerHTML = '<option value="">انتخاب کنید</option>';
         destSel.innerHTML = '<option value="">انتخاب کنید</option>';
 
         if (type === 'domestic') {
-            // پرواز داخلی: مبدأ و مقصد از شهرهای ایران
             originLabel.textContent = 'مبدأ (شهر ایران)';
             destLabel.textContent = 'مقصد (شهر ایران)';
 
             domesticCities.forEach(function(city) {
                 const o1 = document.createElement('option');
-                o1.textContent = city;
-                o1.value = city;
+                o1.textContent = city; o1.value = city;
                 originSel.appendChild(o1);
-
                 const o2 = document.createElement('option');
-                o2.textContent = city;
-                o2.value = city;
+                o2.textContent = city; o2.value = city;
                 destSel.appendChild(o2);
             });
         } else {
-            // پرواز خارجی: مبدأ از شهرهای ایران، مقصد از شهرهای خارجی
             originLabel.textContent = 'مبدأ (شهر ایران)';
             destLabel.textContent = 'مقصد (شهر خارجی)';
 
             domesticCities.forEach(function(city) {
                 const o1 = document.createElement('option');
-                o1.textContent = city;
-                o1.value = city;
+                o1.textContent = city; o1.value = city;
                 originSel.appendChild(o1);
             });
-
             internationalCities.forEach(function(city) {
                 const o2 = document.createElement('option');
-                o2.textContent = city;
-                o2.value = city;
+                o2.textContent = city; o2.value = city;
                 destSel.appendChild(o2);
             });
         }
 
-        // نمایش فرم
         document.getElementById('typeBox').style.display = 'none';
         document.getElementById('formBox').style.display = 'block';
     }
 
-    // بازگشت به صفحه انتخاب نوع
+    // انتخاب نوع سفر (یک‌طرفه / رفت و برگشت)
+    function setTripType(t) {
+        currentTrip = t;
+        document.getElementById('btnOneWay').classList.toggle('active', t === 'oneway');
+        document.getElementById('btnRound').classList.toggle('active', t === 'round');
+        document.getElementById('returnField').style.display = (t === 'round') ? 'block' : 'none';
+    }
+
+    // بازگشت
     function goBack() {
         document.getElementById('typeBox').style.display = 'block';
         document.getElementById('formBox').style.display = 'none';
         document.getElementById('ticketBox').style.display = 'none';
+    }
+
+    // تابع کمکی: تاریخ فارسی
+    function toFaDate(d) {
+        const obj = new Date(d);
+        return obj.toLocaleDateString('fa-IR',
+            { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    // تابع کمکی: شماره پرواز
+    function makeFlightNo() {
+        const prefix = (currentType === 'domestic') ? 'IR' : 'IX';
+        return prefix + Math.floor(100 + Math.random() * 900);
+    }
+
+    // تابع کمکی: شماره صندلی
+    function makeSeat() {
+        return Math.floor(1 + Math.random() * 40) + 'A';
     }
 
     // صدور بلیت
@@ -373,6 +496,7 @@
         const destination = document.getElementById('destination').value;
         const date = document.getElementById('date').value;
         const tclass = document.getElementById('tclass').value;
+        const returnDate = document.getElementById('returnDate').value;
         const msg = document.getElementById('msg');
 
         if (!name || !origin || !destination || !date) {
@@ -385,29 +509,55 @@
             msg.textContent = 'مبدأ و مقصد نمی‌توانند یکسان باشند!';
             return;
         }
+        if (currentTrip === 'round') {
+            if (!returnDate) {
+                msg.style.display = 'block';
+                msg.textContent = 'لطفاً تاریخ برگشت را وارد کنید!';
+                return;
+            }
+            if (new Date(returnDate) < new Date(date)) {
+                msg.style.display = 'block';
+                msg.textContent = 'تاریخ برگشت نمی‌تواند قبل از تاریخ رفت باشد!';
+                return;
+            }
+        }
         msg.style.display = 'none';
 
         const code = 'FL-' + Math.floor(10000 + Math.random() * 90000);
-        const flightNo = (currentType === 'domestic' ? 'IR' : 'IX') +
-                         Math.floor(100 + Math.random() * 900);
-        const seat = Math.floor(1 + Math.random() * 40) + 'A';
 
-        const dateObj = new Date(date);
-        const fdate = dateObj.toLocaleDateString('fa-IR',
-            { year: 'numeric', month: 'long', day: 'numeric' });
-
-        // عنوان بلیت بر اساس نوع
-        document.getElementById('tType').textContent =
-            (currentType === 'domestic') ? '🎫 بلیت پرواز داخلی' : '🌍 بلیت پرواز خارجی';
-
+        // عنوان بلیت
+        let title = '';
+        if (currentType === 'domestic') title = '🎫 بلیت پرواز داخلی';
+        else title = '🌍 بلیت پرواز خارجی';
+        if (currentTrip === 'round') title += ' (رفت و برگشت)';
+        document.getElementById('tType').textContent = title;
         document.getElementById('tCode').textContent = code;
-        document.getElementById('tName').textContent = name;
-        document.getElementById('tFrom').textContent = origin;
-        document.getElementById('tTo').textContent = destination;
-        document.getElementById('tDate').textContent = fdate;
-        document.getElementById('tSeat').textContent = seat;
-        document.getElementById('tClass').textContent = tclass;
-        document.getElementById('tFlight').textContent = flightNo;
+
+        // ===== بلیت رفت =====
+        document.getElementById('leg1Title').textContent =
+            (currentTrip === 'round') ? 'پرواز رفت' : 'بلیت پرواز';
+
+        document.getElementById('tName1').textContent = name;
+        document.getElementById('tFrom1').textContent = origin;
+        document.getElementById('tTo1').textContent = destination;
+        document.getElementById('tDate1').textContent = toFaDate(date);
+        document.getElementById('tSeat1').textContent = makeSeat();
+        document.getElementById('tClass1').textContent = tclass;
+        document.getElementById('tFlight1').textContent = makeFlightNo();
+
+        // ===== بلیت برگشت =====
+        if (currentTrip === 'round') {
+            document.getElementById('returnBlock').style.display = 'block';
+            document.getElementById('tName2').textContent = name;
+            document.getElementById('tFrom2').textContent = destination; // برگشت: مقصد به مبدأ
+            document.getElementById('tTo2').textContent = origin;
+            document.getElementById('tDate2').textContent = toFaDate(returnDate);
+            document.getElementById('tSeat2').textContent = makeSeat();
+            document.getElementById('tClass2').textContent = tclass;
+            document.getElementById('tFlight2').textContent = makeFlightNo();
+        } else {
+            document.getElementById('returnBlock').style.display = 'none';
+        }
 
         document.getElementById('formBox').style.display = 'none';
         document.getElementById('ticketBox').style.display = 'block';
@@ -422,7 +572,11 @@
         document.getElementById('origin').value = '';
         document.getElementById('destination').value = '';
         document.getElementById('date').value = '';
+        document.getElementById('returnDate').value = '';
         document.getElementById('tclass').value = 'اقتصادی';
+
+        currentTrip = 'oneway';
+        setTripType('oneway');
 
         document.getElementById('ticketBox').style.display = 'none';
         document.getElementById('typeBox').style.display = 'block';
