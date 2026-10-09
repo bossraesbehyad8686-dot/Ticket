@@ -48,7 +48,6 @@
         box-shadow: 0 0 0 4px rgba(30,90,168,0.15);
     }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     .btn-main {
         width: 100%; padding: 14px;
         background: linear-gradient(135deg, #0a1e3f, #1e5aa8);
@@ -95,10 +94,21 @@
         margin-bottom: 12px;
         position: relative;
         border: 1px solid #e0e8f0;
+        transition: 0.3s;
+    }
+    .passenger-block.saved {
+        border-color: #27ae60;
+        background: #f0fdf4;
     }
     .passenger-block .p-title {
         font-size: 12px; font-weight: bold; color: #1e5aa8;
         margin-bottom: 10px;
+        display: flex; align-items: center; gap: 6px;
+    }
+    .passenger-block .saved-badge {
+        background: #27ae60; color: #fff;
+        font-size: 10px; padding: 2px 8px;
+        border-radius: 10px;
     }
     .passenger-block .remove-btn {
         position: absolute; top: 10px; left: 10px;
@@ -108,6 +118,29 @@
         cursor: pointer; font-size: 14px;
         line-height: 1;
     }
+    .passenger-block input {
+        margin-bottom: 8px;
+    }
+    .passenger-block input:last-child { margin-bottom: 0; }
+    .nid-status {
+        font-size: 11px;
+        margin-top: 6px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        display: none;
+        text-align: center;
+    }
+    .nid-status.found {
+        display: block;
+        background: #d1fae5;
+        color: #065f46;
+    }
+    .nid-status.new {
+        display: block;
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
     .btn-add-passenger {
         width: 100%; padding: 10px;
         background: #eef4fb; color: #1e5aa8;
@@ -116,6 +149,17 @@
         font-size: 13px; font-weight: bold;
         cursor: pointer; margin-bottom: 16px;
     }
+
+    /* دکمه پاک کردن حافظه */
+    .btn-clear-memory {
+        width: 100%; padding: 10px;
+        background: #fff5f5; color: #e74c3c;
+        border: 2px solid #fecaca;
+        border-radius: 12px;
+        font-size: 12px; font-weight: bold;
+        cursor: pointer; margin-bottom: 16px;
+    }
+    .btn-clear-memory:hover { background: #fee2e2; }
 
     /* قیمت */
     .price-box {
@@ -189,7 +233,6 @@
         padding: 12px; background: #0a1e3f;
     }
 
-    /* اطلاعات تماس */
     .contact-info {
         background: #f5f8fb;
         border-radius: 12px;
@@ -221,6 +264,17 @@
         border-top: 1px solid #eee;
     }
     .footer-brand strong { color: #0a1e3f; }
+
+    .hint-box {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 11px;
+        color: #92400e;
+        margin-bottom: 16px;
+        line-height: 1.7;
+    }
 </style>
 </head>
 <body>
@@ -258,11 +312,16 @@
     <div class="box-body" id="formBox" style="display:none;">
         <div class="msg" id="msg"></div>
 
+        <div class="hint-box">
+            💡 <strong>راهنما:</strong> کد ملی را وارد کنید. اگر قبلاً ثبت شده باشد، اطلاعات به‌طور خودکار پر می‌شود. در غیر این صورت، اطلاعات جدید ذخیره می‌شود.
+        </div>
+
         <!-- مسافران -->
         <div class="field">
-            <label>مسافران (نام و کد ملی)</label>
+            <label>مسافران (کد ملی و نام)</label>
             <div id="passengersContainer"></div>
             <button type="button" class="btn-add-passenger" onclick="addPassenger()">+ افزودن مسافر</button>
+            <button type="button" class="btn-clear-memory" onclick="clearAllMemory()">🗑️ پاک کردن همه اطلاعات ذخیره‌شده</button>
         </div>
 
         <!-- نوع سفر -->
@@ -284,7 +343,6 @@
             <select id="destination"><option value="">انتخاب کنید</option></select>
         </div>
 
-        <!-- تاریخ و ساعت -->
         <div class="field row2">
             <div>
                 <label>تاریخ رفت</label>
@@ -307,7 +365,6 @@
             </div>
         </div>
 
-        <!-- کلاس -->
         <div class="field">
             <label>کلاس پرواز</label>
             <select id="tclass" onchange="updatePrice()">
@@ -317,7 +374,6 @@
             </select>
         </div>
 
-        <!-- نمایش قیمت -->
         <div class="price-box">
             <div>
                 <div class="lbl">قیمت کل</div>
@@ -408,13 +464,11 @@
                     <div class="barcode-new"></div>
                 </div>
 
-                <!-- لیست مسافران -->
                 <div class="ticket-block">
                     <span class="leg-title">مسافران و صندلی‌ها</span>
                     <div id="passengersTicketList" style="font-size:12px; line-height:2; color:#333;"></div>
                 </div>
 
-                <!-- قیمت روی بلیت -->
                 <div class="ticket-block">
                     <div class="price-box" style="margin-bottom:0;">
                         <div>
@@ -428,7 +482,6 @@
                 <div class="ticket-btm">Mahan Air | ما اعتماد پرواز</div>
             </div>
 
-            <!-- اطلاعات تماس -->
             <div class="contact-info">
                 <strong>📞 اطلاعات تماس ماهان ایر:</strong><br>
                 ☎️ تلفن: ۰۲۱-۴۱۲۳۴۵۶۷ | ۰۲۱-۴۱۲۳۴۵۶۸<br>
@@ -441,7 +494,7 @@
 
         <div class="actions">
             <button class="btn-print" onclick="printTicket()">🖨️ چاپ</button>
-            <button class="btn-download" onclick="downloadTicket()">📸 دانلود</button>
+            <button class="btn-download" onclick="downloadTicket(event)">📸 دانلود</button>
         </div>
         <button class="btn-new" onclick="newTicket()" style="margin-top:10px;">🎫 بلیت جدید</button>
     </div>
@@ -485,7 +538,6 @@
         "تونس (تونس)", "الجزیره (الجزایر)", "طرابلس (لیبی)"
     ];
 
-    // قیمت پایه هر مسیر (تومان)
     const PRICE_DOMESTIC = 2500000;
     const PRICE_INTERNATIONAL = 15000000;
     const CLASS_MULT = { "اقتصادی": 1, "بیزینس": 2.2, "فرست کلاس": 3.5 };
@@ -494,7 +546,99 @@
     let currentTrip = 'oneway';
     let passengerCount = 1;
 
-    // ===== انتخاب نوع پرواز =====
+    // ========== ذخیره‌سازی محلی (localStorage) ==========
+    const STORAGE_KEY = 'mahan_passengers_db';
+
+    function getPassengersDB() {
+        try {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : {};
+        } catch (e) { return {}; }
+    }
+
+    function savePassengersDB(db) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+        } catch (e) {
+            console.error('خطا در ذخیره‌سازی', e);
+        }
+    }
+
+    function savePassengerToDB(nid, info) {
+        const db = getPassengersDB();
+        db[nid] = info;
+        savePassengersDB(db);
+    }
+
+    function findPassengerInDB(nid) {
+        const db = getPassengersDB();
+        return db[nid] || null;
+    }
+
+    function clearAllMemory() {
+        if (confirm('آیا مطمئن هستید که می‌خواهید همه اطلاعات ذخیره‌شده پاک شود؟')) {
+            localStorage.removeItem(STORAGE_KEY);
+            alert('✅ همه اطلاعات ذخیره‌شده پاک شد.');
+        }
+    }
+
+    // ========== اعتبارسنجی کد ملی ==========
+    function validateNID(nid) {
+        if (!/^\d{10}$/.test(nid)) return false;
+        if (/^(\d)\1{9}$/.test(nid)) return false;
+
+        const check = parseInt(nid[9]);
+        let sum = 0;
+        for (let i = 0; i < 9; i++) {
+            sum += parseInt(nid[i]) * (10 - i);
+        }
+        const rem = sum % 11;
+        return (rem < 2 && check === rem) || (rem >= 2 && check === 11 - rem);
+    }
+
+    // ========== استعلام کد ملی (از حافظه) ==========
+    function lookupNID(inputEl) {
+        const block = inputEl.closest('.passenger-block');
+        const nid = inputEl.value.trim();
+        const nameInput = block.querySelector('.p-name');
+        const statusEl = block.querySelector('.nid-status');
+
+        // اگه کد ملی ناقصه، هیچی نشون نده
+        if (nid.length < 10) {
+            statusEl.className = 'nid-status';
+            statusEl.textContent = '';
+            block.classList.remove('saved');
+            return;
+        }
+
+        // اعتبارسنجی
+        if (!validateNID(nid)) {
+            statusEl.className = 'nid-status';
+            statusEl.textContent = '';
+            block.classList.remove('saved');
+            return;
+        }
+
+        // جستجو در حافظه
+        const found = findPassengerInDB(nid);
+        if (found) {
+            // پیدا شد - پر کردن خودکار
+            nameInput.value = found.name || '';
+            statusEl.className = 'nid-status found';
+            statusEl.textContent = '✅ اطلاعات این کد ملی پیدا شد و پر شد';
+            block.classList.add('saved');
+            // انیمیشن
+            nameInput.style.background = '#d1fae5';
+            setTimeout(() => nameInput.style.background = '', 1000);
+        } else {
+            // جدید
+            statusEl.className = 'nid-status new';
+            statusEl.textContent = '🆕 کد ملی جدید — لطفاً نام را وارد کنید';
+            block.classList.remove('saved');
+        }
+    }
+
+    // ========== انتخاب نوع پرواز ==========
     function selectType(type) {
         currentType = type;
         const originSel = document.getElementById('origin');
@@ -519,7 +663,6 @@
             internationalCities.forEach(c => destSel.appendChild(new Option(c, c)));
         }
 
-        // اضافه کردن اولین مسافر
         if (document.getElementById('passengersContainer').children.length === 0) {
             addPassenger();
         }
@@ -529,7 +672,7 @@
         updatePrice();
     }
 
-    // ===== مدیریت مسافران =====
+    // ========== مدیریت مسافران ==========
     function addPassenger() {
         if (passengerCount >= 9) {
             alert('حداکثر ۹ مسافر مجاز است.');
@@ -542,12 +685,18 @@
         div.className = 'passenger-block';
         div.innerHTML = `
             <button type="button" class="remove-btn" onclick="removePassenger(this)">✕</button>
-            <div class="p-title">مسافر ${idx}</div>
-            <input type="text" placeholder="نام و نام خانوادگی" class="p-name" style="margin-bottom:8px; width:100%; padding:8px 10px; border:2px solid #d0dbe8; border-radius:8px; font-size:13px;">
-            <input type="text" placeholder="کد ملی (۱۰ رقم)" class="p-nid" maxlength="10" style="width:100%; padding:8px 10px; border:2px solid #d0dbe8; border-radius:8px; font-size:13px;">
+            <div class="p-title">مسافر ${idx} <span class="saved-badge" style="display:none;">ذخیره‌شده</span></div>
+            <input type="text" placeholder="کد ملی (۱۰ رقم)" class="p-nid" maxlength="10" inputmode="numeric" oninput="lookupNID(this)">
+            <div class="nid-status"></div>
+            <input type="text" placeholder="نام و نام خانوادگی" class="p-name" style="margin-top:8px;">
         `;
         container.appendChild(div);
         updatePrice();
+
+        // فوکوس روی فیلد کد ملی جدید
+        setTimeout(() => {
+            div.querySelector('.p-nid').focus();
+        }, 100);
     }
 
     function removePassenger(btn) {
@@ -558,14 +707,13 @@
         }
         btn.parentElement.remove();
         passengerCount--;
-        // بروزرسانی شماره‌ها
         Array.from(container.children).forEach((el, i) => {
             el.querySelector('.p-title').textContent = `مسافر ${i + 1}`;
         });
         updatePrice();
     }
 
-    // ===== نوع سفر =====
+    // ========== نوع سفر ==========
     function setTripType(t) {
         currentTrip = t;
         document.getElementById('btnOneWay').classList.toggle('active', t === 'oneway');
@@ -574,7 +722,7 @@
         updatePrice();
     }
 
-    // ===== محاسبه قیمت =====
+    // ========== قیمت ==========
     function updatePrice() {
         const tclass = document.getElementById('tclass').value;
         const mult = CLASS_MULT[tclass] || 1;
@@ -585,14 +733,12 @@
         document.getElementById('priceDisplay').textContent = total.toLocaleString('fa-IR') + ' تومان';
     }
 
-    // ===== بازگشت =====
     function goBack() {
         document.getElementById('typeBox').style.display = 'block';
         document.getElementById('formBox').style.display = 'none';
         document.getElementById('ticketBox').style.display = 'none';
     }
 
-    // ===== تاریخ فارسی =====
     function toFaDate(d) {
         const obj = new Date(d);
         return obj.toLocaleDateString('fa-IR',
@@ -608,7 +754,7 @@
         return Math.floor(1 + Math.random() * 30) + letters[Math.floor(Math.random() * 6)];
     }
 
-    // ===== صدور بلیت =====
+    // ========== صدور بلیت ==========
     function makeTicket() {
         const msg = document.getElementById('msg');
         const origin = document.getElementById('origin').value;
@@ -619,21 +765,27 @@
         const returnTime = document.getElementById('returnTime').value;
         const tclass = document.getElementById('tclass').value;
 
-        // گرفتن مسافران
         const passengerEls = document.querySelectorAll('.passenger-block');
         const passengers = [];
         let valid = true;
-        passengerEls.forEach((el, i) => {
+        let errorText = '';
+
+        passengerEls.forEach((el) => {
             const name = el.querySelector('.p-name').value.trim();
             const nid = el.querySelector('.p-nid').value.trim();
-            if (!name) { valid = false; }
-            if (!/^\d{10}$/.test(nid)) { valid = false; }
+            if (!/^\d{10}$/.test(nid) || !validateNID(nid)) {
+                valid = false;
+                errorText = 'کد ملی وارد شده معتبر نیست!';
+            } else if (!name) {
+                valid = false;
+                errorText = 'لطفاً نام همه مسافران را وارد کنید!';
+            }
             passengers.push({ name, nid, seat: makeSeat() });
         });
 
         if (!valid) {
             msg.style.display = 'block';
-            msg.textContent = 'لطفاً نام همه مسافران و کد ملی ۱۰ رقمی را وارد کنید!';
+            msg.textContent = errorText;
             return;
         }
         if (!origin || !destination || !date || !time) {
@@ -660,6 +812,15 @@
         }
         msg.style.display = 'none';
 
+        // 💾 ذخیره همه مسافران در حافظه
+        passengers.forEach(p => {
+            savePassengerToDB(p.nid, {
+                name: p.name,
+                lastVisit: new Date().toISOString(),
+                flightCount: (findPassengerInDB(p.nid)?.flightCount || 0) + 1
+            });
+        });
+
         const code = 'MA-' + Math.floor(100000 + Math.random() * 900000);
 
         let title = 'بلیت پرواز ';
@@ -668,7 +829,6 @@
         document.getElementById('tType').textContent = title;
         document.getElementById('tCode').textContent = code;
 
-        // بلیت رفت
         document.getElementById('leg1Title').textContent =
             (currentTrip === 'round') ? 'پرواز رفت' : 'بلیت پرواز';
         document.getElementById('tFrom1').textContent = origin;
@@ -677,7 +837,6 @@
         document.getElementById('tClass1').textContent = tclass;
         document.getElementById('tFlight1').textContent = makeFlightNo();
 
-        // بلیت برگشت
         if (currentTrip === 'round') {
             document.getElementById('leg2').style.display = 'block';
             document.getElementById('tFrom2').textContent = destination;
@@ -689,18 +848,16 @@
             document.getElementById('leg2').style.display = 'none';
         }
 
-        // لیست مسافران روی بلیت
         let listHtml = '';
-        passengers.forEach((p, i) => {
-            listHtml += `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #e0e8f0;">
+        passengers.forEach((p) => {
+            listHtml += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #e0e8f0; flex-wrap:wrap; gap:5px;">
                 <span>👤 ${p.name}</span>
-                <span style="color:#888;">کد ملی: ${p.nid}</span>
+                <span style="color:#888; font-size:11px;">کد ملی: ${p.nid}</span>
                 <span style="color:#1e5aa8; font-weight:bold;">صندلی: ${p.seat}</span>
             </div>`;
         });
         document.getElementById('passengersTicketList').innerHTML = listHtml;
 
-        // قیمت روی بلیت
         const tclassMult = CLASS_MULT[tclass] || 1;
         const basePrice = (currentType === 'international') ? PRICE_INTERNATIONAL : PRICE_DOMESTIC;
         const legs = (currentTrip === 'round') ? 2 : 1;
@@ -711,15 +868,13 @@
         document.getElementById('ticketBox').style.display = 'block';
     }
 
-    // ===== چاپ =====
     function printTicket() { window.print(); }
 
-    // ===== دانلود تصویر بلیت =====
-    function downloadTicket() {
+    function downloadTicket(event) {
         const el = document.getElementById('ticketContent');
         const btn = event.target;
         const original = btn.textContent;
-        btn.textContent = '⏳ در حال آماده‌سازی...';
+        btn.textContent = '⏳ صبر کنید...';
         btn.disabled = true;
 
         html2canvas(el, { backgroundColor: '#0a1e3f', scale: 2 }).then(canvas => {
@@ -730,15 +885,13 @@
             btn.textContent = original;
             btn.disabled = false;
         }).catch(err => {
-            alert('خطا در دانلود تصویر. لطفاً دوباره تلاش کنید.');
+            alert('خطا در دانلود. دوباره امتحان کنید.');
             btn.textContent = original;
             btn.disabled = false;
         });
     }
 
-    // ===== بلیت جدید =====
     function newTicket() {
-        // پاک کردن مسافران
         document.getElementById('passengersContainer').innerHTML = '';
         passengerCount = 0;
         document.getElementById('origin').value = '';
@@ -752,11 +905,8 @@
         document.getElementById('typeBox').style.display = 'block';
     }
 
-    // ===== Event Listeners =====
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('tclass').addEventListener('change', updatePrice);
-        document.getElementById('origin').addEventListener('change', updatePrice);
-        document.getElementById('destination').addEventListener('change', updatePrice);
     });
 </script>
 
