@@ -29,24 +29,14 @@
     .box-header img {
         max-width: 200px; background: #fff;
         padding: 12px 20px; border-radius: 12px; margin-bottom: 10px;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
     }
     .box-header .slogan {
         color: #fff; font-size: 13px; letter-spacing: 1px; opacity: 0.9;
     }
-    .admin-btn {
-        position: absolute;
-        top: 15px; left: 15px;
-        background: rgba(255,255,255,0.15);
-        color: #fff;
-        border: 1px solid rgba(255,255,255,0.3);
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 11px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .admin-btn:hover { background: rgba(255,255,255,0.3); }
-
     .box-body { padding: 25px; }
     .field { margin-bottom: 16px; }
     .field label {
@@ -110,39 +100,24 @@
         border: 1px solid #e0e8f0;
         transition: 0.3s;
     }
-    .passenger-block.saved {
-        border-color: #27ae60; background: #f0fdf4;
-    }
-    .passenger-block.invalid {
-        border-color: #e74c3c; background: #fef2f2;
-    }
+    .passenger-block.saved { border-color: #27ae60; background: #f0fdf4; }
+    .passenger-block.invalid { border-color: #e74c3c; background: #fef2f2; }
     .passenger-block .p-title {
         font-size: 12px; font-weight: bold; color: #1e5aa8;
-        margin-bottom: 10px;
-        display: flex; align-items: center; gap: 6px;
-    }
-    .passenger-block .saved-badge {
-        background: #27ae60; color: #fff;
-        font-size: 10px; padding: 2px 8px;
-        border-radius: 10px;
+        margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
     }
     .passenger-block .remove-btn {
         position: absolute; top: 10px; left: 10px;
         background: #e74c3c; color: #fff;
         border: none; border-radius: 50%;
         width: 24px; height: 24px;
-        cursor: pointer; font-size: 14px;
-        line-height: 1;
+        cursor: pointer; font-size: 14px; line-height: 1;
     }
     .passenger-block input { margin-bottom: 8px; }
     .passenger-block input:last-of-type { margin-bottom: 0; }
     .nid-status {
-        font-size: 11px;
-        margin-top: 6px;
-        padding: 6px 10px;
-        border-radius: 8px;
-        display: none;
-        text-align: center;
+        font-size: 11px; margin-top: 6px; padding: 6px 10px;
+        border-radius: 8px; display: none; text-align: center;
     }
     .nid-status.found { display: block; background: #d1fae5; color: #065f46; }
     .nid-status.new { display: block; background: #dbeafe; color: #1e40af; }
@@ -151,16 +126,14 @@
     .btn-add-passenger {
         width: 100%; padding: 10px;
         background: #eef4fb; color: #1e5aa8;
-        border: 2px dashed #1e5aa8;
-        border-radius: 12px;
+        border: 2px dashed #1e5aa8; border-radius: 12px;
         font-size: 13px; font-weight: bold;
         cursor: pointer; margin-bottom: 16px;
     }
     .btn-clear-memory {
         width: 100%; padding: 10px;
         background: #fff5f5; color: #e74c3c;
-        border: 2px solid #fecaca;
-        border-radius: 12px;
+        border: 2px solid #fecaca; border-radius: 12px;
         font-size: 12px; font-weight: bold;
         cursor: pointer; margin-bottom: 16px;
     }
@@ -174,7 +147,6 @@
     .price-box .lbl { font-size: 12px; opacity: 0.85; }
     .price-box .amount { font-size: 20px; font-weight: bold; }
 
-    /* بلیت */
     .ticket {
         display: none; background: #fff;
         border-radius: 18px; overflow: hidden;
@@ -216,10 +188,8 @@
     .detail-item .lbl { font-size: 10px; color: #888; }
     .detail-item .val { font-size: 13px; font-weight: bold; color: #0a1e3f; margin-top: 3px; }
     
-    /* وضعیت‌ها */
     .status-badge {
-        display: inline-block;
-        padding: 4px 12px; border-radius: 20px;
+        display: inline-block; padding: 4px 12px; border-radius: 20px;
         font-size: 11px; font-weight: bold;
     }
     .status-confirmed { background: #d1fae5; color: #065f46; border: 1px solid #27ae60; }
@@ -273,61 +243,45 @@
 
     /* پنل ادمین */
     .modal-overlay {
-        display: none;
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0,0,0,0.7);
-        z-index: 1000;
-        align-items: center; justify-content: center;
-        padding: 20px;
+        display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.7); z-index: 1000;
+        align-items: center; justify-content: center; padding: 20px;
     }
     .modal-overlay.active { display: flex; }
     .modal-box {
         background: #fff; border-radius: 20px;
-        width: 100%; max-width: 500px;
-        max-height: 90vh; overflow-y: auto;
+        width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;
         padding: 20px;
     }
     .modal-box h3 {
-        color: #0a1e3f; font-size: 18px;
-        margin-bottom: 15px; text-align: center;
+        color: #0a1e3f; font-size: 18px; margin-bottom: 15px; text-align: center;
         display: flex; justify-content: space-between; align-items: center;
     }
     .modal-close {
-        background: #e74c3c; color: #fff;
-        border: none; border-radius: 50%;
-        width: 28px; height: 28px; cursor: pointer;
-        font-size: 16px;
+        background: #e74c3c; color: #fff; border: none; border-radius: 50%;
+        width: 28px; height: 28px; cursor: pointer; font-size: 16px;
     }
     .admin-ticket {
         background: #f5f8fb; border-radius: 12px;
-        padding: 12px; margin-bottom: 10px;
-        border: 1px solid #e0e8f0;
+        padding: 12px; margin-bottom: 10px; border: 1px solid #e0e8f0;
     }
-    .admin-ticket .info {
-        font-size: 12px; color: #555;
-        line-height: 1.8; margin-bottom: 8px;
-    }
+    .admin-ticket .info { font-size: 12px; color: #555; line-height: 1.8; margin-bottom: 8px; }
     .admin-ticket .info strong { color: #0a1e3f; }
-    .admin-ticket .btn-row {
-        display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-    }
+    .admin-ticket .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .btn-approve, .btn-reject {
         padding: 8px; border: none; border-radius: 8px;
         font-size: 12px; font-weight: bold; cursor: pointer;
     }
     .btn-approve { background: #27ae60; color: #fff; }
     .btn-reject { background: #e74c3c; color: #fff; }
-    .admin-empty {
-        text-align: center; color: #999;
-        font-size: 13px; padding: 30px 10px;
-    }
+    .admin-empty { text-align: center; color: #999; font-size: 13px; padding: 30px 10px; }
 </style>
 </head>
 <body>
    <div class="box">
     <div class="box-header">
-        <button class="admin-btn" onclick="openAdmin()">⚙️ مدیریت</button>
-        <img src="mahan-logo.png" alt="Mahan Air">
+        <!-- لوگو با قابلیت کلیک مخفی -->
+        <img src="mahan-logo.png" alt="Mahan Air" onclick="secretClick()">
         <div class="slogan">ما اعتماد پرواز</div>
     </div>
 
@@ -357,7 +311,7 @@
     <div class="box-body" id="formBox" style="display:none;">
         <div class="msg" id="msg"></div>
         <div class="hint-box">
-            💡 <strong>راهنما:</strong> کد ملی را وارد کنید. اطلاعات به‌طور خودکار پر می‌شود. کد ملی نامعتبر (۱۱ رقم یا اشتباه) باعث <strong>لغو</strong> بلیت می‌شود!
+            💡 <strong>راهنما:</strong> کد ملی را وارد کنید. اطلاعات به‌طور خودکار پر می‌شود. کد ملی نامعتبر باعث <strong>لغو</strong> بلیت می‌شود!
         </div>
 
         <div class="field">
@@ -599,50 +553,36 @@
     let currentType = '';
     let currentTrip = 'oneway';
     let passengerCount = 1;
-    let currentTicketData = null;
 
     const STORAGE_KEY = 'mahan_passengers_db';
     const TICKETS_KEY = 'mahan_tickets_db';
 
-    // ========== مدیریت بلیت‌ها (برای پنل ادمین) ==========
+    // ========== مدیریت بلیت‌ها ==========
     function getTicketsDB() {
-        try {
-            const data = localStorage.getItem(TICKETS_KEY);
-            return data ? JSON.parse(data) : [];
-        } catch (e) { return []; }
+        try { return JSON.parse(localStorage.getItem(TICKETS_KEY)) || []; } catch (e) { return []; }
     }
-    function saveTicketsDB(arr) {
-        localStorage.setItem(TICKETS_KEY, JSON.stringify(arr));
-    }
+    function saveTicketsDB(arr) { localStorage.setItem(TICKETS_KEY, JSON.stringify(arr)); }
     function saveTicketToDB(ticket) {
         const db = getTicketsDB();
-        db.unshift(ticket); // جدیدترین اول
+        db.unshift(ticket);
         saveTicketsDB(db);
     }
     function updateTicketStatus(code, newStatus) {
         const db = getTicketsDB();
         const idx = db.findIndex(t => t.code === code);
-        if (idx >= 0) {
-            db[idx].status = newStatus;
-            saveTicketsDB(db);
-        }
+        if (idx >= 0) { db[idx].status = newStatus; saveTicketsDB(db); }
     }
 
     // ========== ذخیره مسافران ==========
     function getPassengersDB() {
-        try {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : {};
-        } catch (e) { return {}; }
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; }
     }
     function savePassengerToDB(nid, info) {
         const db = getPassengersDB();
         db[nid] = info;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
     }
-    function findPassengerInDB(nid) {
-        return getPassengersDB()[nid] || null;
-    }
+    function findPassengerInDB(nid) { return getPassengersDB()[nid] || null; }
     function clearAllMemory() {
         if (confirm('آیا مطمئن هستید که می‌خواهید همه اطلاعات ذخیره‌شده پاک شود؟')) {
             localStorage.removeItem(STORAGE_KEY);
@@ -668,7 +608,6 @@
         const nameInput = block.querySelector('.p-name');
         const statusEl = block.querySelector('.nid-status');
 
-        // اگه کد ملی ۱۱ رقم بود → خطا
         if (nid.length > 10) {
             statusEl.className = 'nid-status bad';
             statusEl.textContent = '❌ کد ملی نمی‌تواند بیش از ۱۰ رقم باشد!';
@@ -676,14 +615,12 @@
             block.classList.add('invalid');
             return;
         }
-
         if (nid.length < 10) {
             statusEl.className = 'nid-status';
             statusEl.textContent = '';
             block.classList.remove('saved', 'invalid');
             return;
         }
-
         if (!validateNID(nid)) {
             statusEl.className = 'nid-status bad';
             statusEl.textContent = '❌ کد ملی وارد شده معتبر نیست!';
@@ -691,8 +628,6 @@
             block.classList.add('invalid');
             return;
         }
-
-        // کد ملی معتبر
         block.classList.remove('invalid');
         const found = findPassengerInDB(nid);
         if (found) {
@@ -716,7 +651,6 @@
         const destSel = document.getElementById('destination');
         const originLabel = document.getElementById('originLabel');
         const destLabel = document.getElementById('destLabel');
-
         originSel.innerHTML = '<option value="">انتخاب کنید</option>';
         destSel.innerHTML = '<option value="">انتخاب کنید</option>';
 
@@ -733,11 +667,7 @@
             domesticCities.forEach(c => originSel.appendChild(new Option(c, c)));
             internationalCities.forEach(c => destSel.appendChild(new Option(c, c)));
         }
-
-        if (document.getElementById('passengersContainer').children.length === 0) {
-            addPassenger();
-        }
-
+        if (document.getElementById('passengersContainer').children.length === 0) addPassenger();
         document.getElementById('typeBox').style.display = 'none';
         document.getElementById('formBox').style.display = 'block';
         updatePrice();
@@ -753,7 +683,7 @@
         div.className = 'passenger-block';
         div.innerHTML = `
             <button type="button" class="remove-btn" onclick="removePassenger(this)">✕</button>
-            <div class="p-title">مسافر ${idx} <span class="saved-badge" style="display:none;">ذخیره‌شده</span></div>
+            <div class="p-title">مسافر ${idx}</div>
             <input type="text" placeholder="کد ملی (۱۰ رقم)" class="p-nid" maxlength="11" inputmode="numeric" oninput="lookupNID(this)">
             <div class="nid-status"></div>
             <input type="text" placeholder="نام و نام خانوادگی" class="p-name" style="margin-top:8px;">
@@ -799,8 +729,7 @@
     }
 
     function toFaDate(d) {
-        const obj = new Date(d);
-        return obj.toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' });
+        return new Date(d).toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' });
     }
     function makeFlightNo() { return 'W5-' + Math.floor(100 + Math.random() * 900); }
     function makeSeat() {
@@ -808,7 +737,6 @@
         return Math.floor(1 + Math.random() * 30) + letters[Math.floor(Math.random() * 6)];
     }
 
-    // ========== نمایش وضعیت روی بلیت ==========
     function renderStatusBadge(status) {
         if (status === 'confirmed') return '<span class="status-badge status-confirmed">✅ تأیید شده</span>';
         if (status === 'cancelled') return '<span class="status-badge status-cancelled">❌ لغو شده</span>';
@@ -829,22 +757,14 @@
 
         const passengerEls = document.querySelectorAll('.passenger-block');
         const passengers = [];
-        let status = 'confirmed'; // پیش‌فرض: تأیید شده
-
-        // بررسی مسافران
         let hasInvalidNID = false;
         let validNames = true;
 
         passengerEls.forEach(el => {
             const nid = el.querySelector('.p-nid').value.trim();
             const name = el.querySelector('.p-name').value.trim();
-
-            // کد ملی نامعتبر (۱۱ رقم، غیره) → لغو
-            if (nid.length !== 10 || !validateNID(nid)) {
-                hasInvalidNID = true;
-            }
+            if (nid.length !== 10 || !validateNID(nid)) hasInvalidNID = true;
             if (!name) validNames = false;
-
             passengers.push({ name, nid, seat: makeSeat() });
         });
 
@@ -877,53 +797,31 @@
         }
         msg.style.display = 'none';
 
-        // تعیین وضعیت نهایی
-        if (hasInvalidNID) {
-            status = 'cancelled';
-        } else if (tclass === 'بیزینس' || tclass === 'فرست کلاس') {
-            // کلاس بالا → نیاز به بررسی
-            status = 'pending';
-        } else {
-            status = 'confirmed';
-        }
+        let status = 'confirmed';
+        if (hasInvalidNID) status = 'cancelled';
+        else if (tclass === 'بیزینس' || tclass === 'فرست کلاس') status = 'pending';
 
-        // ذخیره مسافران معتبر
         passengers.forEach(p => {
             if (validateNID(p.nid)) {
-                savePassengerToDB(p.nid, {
-                    name: p.name,
-                    lastVisit: new Date().toISOString()
-                });
+                savePassengerToDB(p.nid, { name: p.name, lastVisit: new Date().toISOString() });
             }
         });
 
         const code = 'MA-' + Math.floor(100000 + Math.random() * 900000);
-
-        // ذخیره بلیت در پایگاه داده
         const ticketData = {
-            code,
-            type: currentType,
-            trip: currentTrip,
-            origin, destination,
-            date, time,
-            returnDate, returnTime,
-            tclass,
-            passengers,
-            status,
+            code, type: currentType, trip: currentTrip, origin, destination,
+            date, time, returnDate, returnTime, tclass, passengers, status,
             createdAt: new Date().toISOString()
         };
         saveTicketToDB(ticketData);
-        currentTicketData = ticketData;
 
-        // نمایش بلیت
         let title = 'بلیت پرواز ';
         title += (currentType === 'domestic') ? 'داخلی' : 'خارجی';
         if (currentTrip === 'round') title += ' (رفت و برگشت)';
         document.getElementById('tType').textContent = title;
         document.getElementById('tCode').textContent = code;
 
-        document.getElementById('leg1Title').textContent =
-            (currentTrip === 'round') ? 'پرواز رفت' : 'بلیت پرواز';
+        document.getElementById('leg1Title').textContent = (currentTrip === 'round') ? 'پرواز رفت' : 'بلیت پرواز';
         document.getElementById('tFrom1').textContent = origin;
         document.getElementById('tTo1').textContent = destination;
         document.getElementById('tDate1').textContent = toFaDate(date) + ' - ساعت ' + time;
@@ -971,19 +869,16 @@
         const el = document.getElementById('ticketContent');
         const btn = event.target;
         const original = btn.textContent;
-        btn.textContent = '⏳ صبر کنید...';
-        btn.disabled = true;
+        btn.textContent = '⏳ صبر...'; btn.disabled = true;
         html2canvas(el, { backgroundColor: '#0a1e3f', scale: 2 }).then(canvas => {
             const link = document.createElement('a');
             link.download = 'mahan-ticket-' + Date.now() + '.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
-            btn.textContent = original;
-            btn.disabled = false;
+            btn.textContent = original; btn.disabled = false;
         }).catch(() => {
             alert('خطا در دانلود.');
-            btn.textContent = original;
-            btn.disabled = false;
+            btn.textContent = original; btn.disabled = false;
         });
     }
 
@@ -1001,7 +896,27 @@
         document.getElementById('typeBox').style.display = 'block';
     }
 
-    // ========== پنل مدیریت ==========
+    // ========== پنل ادمین مخفی ==========
+    let secretClickCount = 0;
+    let secretClickTimer = null;
+
+    function secretClick() {
+        secretClickCount++;
+        clearTimeout(secretClickTimer);
+        secretClickTimer = setTimeout(() => { secretClickCount = 0; }, 2000);
+
+        if (secretClickCount >= 5) {
+            secretClickCount = 0;
+            const password = prompt('🔐 رمز مدیریت را وارد کنید:');
+            if (password === null) return;
+            if (password === '1234') {
+                openAdmin();
+            } else {
+                alert('❌ رمز اشتباه است!');
+            }
+        }
+    }
+
     function openAdmin() {
         const list = document.getElementById('adminTicketsList');
         const tickets = getTicketsDB();
@@ -1033,15 +948,12 @@
         document.getElementById('adminModal').classList.add('active');
     }
 
-    function closeAdmin() {
-        document.getElementById('adminModal').classList.remove('active');
-    }
+    function closeAdmin() { document.getElementById('adminModal').classList.remove('active'); }
 
     function adminAction(code, newStatus) {
         updateTicketStatus(code, newStatus);
-        alert('✅ وضعیت بلیت به‌روزرسانی شد: ' + 
-            (newStatus === 'confirmed' ? 'تأیید شد' : 'لغو شد'));
-        openAdmin(); // رفرش پنل
+        alert('✅ وضعیت بلیت به‌روزرسانی شد: ' + (newStatus === 'confirmed' ? 'تأیید شد' : 'لغو شد'));
+        openAdmin();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
